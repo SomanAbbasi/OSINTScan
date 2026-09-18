@@ -54,6 +54,8 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
+        "https://osint-scan.vercel.app",
+        "https://osint-scan-backend.vercel.app",
         "https://handlescope.org",
     ]
 
