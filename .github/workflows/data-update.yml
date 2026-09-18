@@ -1,0 +1,64 @@
+name: Check Upstream WhatsMyName Updates
+
+on:
+  schedule:
+    # Run every Monday at 04:00 UTC
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install requests jsonschema
+
+      - name: Check for upstream updates
+        id: check_upstream
+        run: |
+          python scripts/check-upstream-updates.py > update_report.txt
+          cat update_report.txt
+
+      - name: Run normalization and validation
+        run: |
+          python scripts/merge-site-data.py
+          python scripts/validate-site-rules.py
+          python scripts/generate-platform-index.py
+
+      - name: Check git diff
+        id: git_diff
+        run: |
+          git diff --stat
+          if [ -n "$(git status --porcelain data/)" ]; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.git_diff.outputs.changes_detected == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore(data): sync upstream WhatsMyName dataset updates"
+          title: "Automated Upstream Dataset Update"
+          body: |
+            ## Upstream WhatsMyName Update Report
+            Automated weekly check detected updates in the upstream WhatsMyName repository.
+
+            ### Verification Summary:
+            - Normalized `data/generated/sites.json`
+            - Passed schema & SSRF validation
+            - Updated `data/platform-display.json`
+
+            Please review the diff and run smoke tests before approving and merging.
+          branch: "auto/upstream-data-sync"
+          delete-branch: true

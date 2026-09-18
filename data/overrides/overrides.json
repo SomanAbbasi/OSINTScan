@@ -1,0 +1,76 @@
+{
+  "description": "HandleScope Local Rule Overrides and Platform Enhancements",
+  "version": "1.0.0",
+  "overrides": {
+    "GitHub": {
+      "displayName": "GitHub",
+      "category": "coding",
+      "confidence": "high",
+      "requiresManualVerification": false,
+      "privacyNotes": "Public profile only; private organizations and repositories are not revealed."
+    },
+    "GitLab": {
+      "displayName": "GitLab",
+      "category": "coding",
+      "confidence": "high",
+      "requiresManualVerification": false
+    },
+    "Reddit": {
+      "displayName": "Reddit",
+      "category": "social",
+      "confidence": "high",
+      "requiresManualVerification": false,
+      "privacyNotes": "Checks public user overview. Shadowbanned or suspended accounts may show not found."
+    },
+    "Twitter": {
+      "displayName": "X (Twitter)",
+      "category": "social",
+      "confidence": "medium",
+      "requiresManualVerification": true,
+      "detectionNotes": "X frequently enforces anti-automation and login walls."
+    },
+    "Pastebin": {
+      "displayName": "Pastebin",
+      "category": "tech",
+      "confidence": "high",
+      "requiresManualVerification": false
+    },
+    "Hugging Face": {
+      "displayName": "Hugging Face",
+      "category": "tech",
+      "confidence": "high",
+      "requiresManualVerification": false
+    },
+    "DeviantArt": {
+      "displayName": "DeviantArt",
+      "category": "art",
+      "confidence": "high",
+      "requiresManualVerification": false
+    },
+    "Docker Hub": {
+      "displayName": "Docker Hub",
+      "category": "tech",
+      "confidence": "high",
+      "requiresManualVerification": false
+    },
+    "Medium": {
+      "displayName": "Medium",
+      "category": "blog",
+      "confidence": "high",
+      "requiresManualVerification": false
+    },
+    "Steam": {
+      "displayName": "Steam Community",
+      "category": "gaming",
+      "confidence": "medium",
+      "requiresManualVerification": true,
+      "privacyNotes": "Checks custom profile URL. Steam users may also use numeric SteamIDs."
+    }
+  },
+  "disabled_rules": [
+    {
+      "name": "7cup",
+      "reason": "Marked invalid in upstream due to platform endpoint deprecation"
+    }
+  ]
+}

@@ -1,0 +1,509 @@
+basePath: /api
+definitions:
+  api.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  handlers.AddNumberInput:
+    properties:
+      number:
+        type: string
+    required:
+    - number
+    type: object
+  handlers.AddNumberResponse:
+    properties:
+      carrier:
+        type: string
+      country:
+        type: string
+      countryCode:
+        type: integer
+      e164:
+        type: string
+      international:
+        type: string
+      local:
+        type: string
+      rawLocal:
+        type: string
+      valid:
+        type: boolean
+    type: object
+  handlers.DryRunScannerInput:
+    properties:
+      number:
+        type: string
+      options:
+        $ref: '#/definitions/remote.ScannerOptions'
+    required:
+    - number
+    - options
+    type: object
+  handlers.DryRunScannerResponse:
+    properties:
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  handlers.GetAllScannersResponse:
+    properties:
+      scanners:
+        items:
+          $ref: '#/definitions/handlers.Scanner'
+        type: array
+    type: object
+  handlers.RunScannerInput:
+    properties:
+      number:
+        type: string
+      options:
+        $ref: '#/definitions/remote.ScannerOptions'
+    required:
+    - number
+    - options
+    type: object
+  handlers.RunScannerResponse:
+    properties:
+      result: {}
+    type: object
+  handlers.Scanner:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  number.Number:
+    properties:
+      carrier:
+        type: string
+      country:
+        type: string
+      countryCode:
+        type: integer
+      e164:
+        type: string
+      international:
+        type: string
+      local:
+        type: string
+      rawLocal:
+        type: string
+      valid:
+        type: boolean
+    type: object
+  remote.GoogleSearchDork:
+    properties:
+      dork:
+        type: string
+      number:
+        type: string
+      url:
+        type: string
+    type: object
+  remote.GoogleSearchResponse:
+    properties:
+      disposable_providers:
+        items:
+          $ref: '#/definitions/remote.GoogleSearchDork'
+        type: array
+      general:
+        items:
+          $ref: '#/definitions/remote.GoogleSearchDork'
+        type: array
+      individuals:
+        items:
+          $ref: '#/definitions/remote.GoogleSearchDork'
+        type: array
+      reputation:
+        items:
+          $ref: '#/definitions/remote.GoogleSearchDork'
+        type: array
+      social_media:
+        items:
+          $ref: '#/definitions/remote.GoogleSearchDork'
+        type: array
+    type: object
+  remote.NumverifyScannerResponse:
+    properties:
+      carrier:
+        type: string
+      country_code:
+        type: string
+      country_name:
+        type: string
+      country_prefix:
+        type: string
+      international_format:
+        type: string
+      line_type:
+        type: string
+      local_format:
+        type: string
+      location:
+        type: string
+      number:
+        type: string
+      valid:
+        type: boolean
+    type: object
+  remote.OVHScannerResponse:
+    properties:
+      city:
+        type: string
+      found:
+        type: boolean
+      number_range:
+        type: string
+      zip_code:
+        type: string
+    type: object
+  remote.ScannerOptions:
+    additionalProperties: true
+    type: object
+  web.JSONResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  web.ScanResultResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      result: {}
+      success:
+        type: boolean
+    type: object
+  web.getAllNumbersResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      numbers:
+        items:
+          $ref: '#/definitions/number.Number'
+        type: array
+      success:
+        type: boolean
+    type: object
+  web.healthResponse:
+    properties:
+      commit:
+        type: string
+      demo:
+        type: boolean
+      success:
+        type: boolean
+      version:
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact: {}
+  description: Advanced information gathering & OSINT framework for phone numbers.
+  license:
+    name: GNU General Public License v3.0
+    url: https://github.com/sundowndev/phoneinfoga/blob/master/LICENSE
+  title: PhoneInfoga REST API
+  version: v2
+paths:
+  /:
+    get:
+      operationId: healthCheck
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.healthResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.JSONResponse'
+      summary: Check if service is healthy.
+      tags:
+      - General
+  /numbers:
+    get:
+      deprecated: true
+      description: This route is actually not used yet.
+      operationId: getAllNumbers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.getAllNumbersResponse'
+      summary: Fetch all previously scanned numbers.
+      tags:
+      - Numbers
+  /numbers/{number}/scan/googlesearch:
+    get:
+      deprecated: true
+      operationId: googleSearchScan
+      parameters:
+      - description: Input phone number
+        in: path
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.ScanResultResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/remote.GoogleSearchResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.JSONResponse'
+      summary: Perform a scan using Google Search engine.
+      tags:
+      - Numbers
+  /numbers/{number}/scan/local:
+    get:
+      deprecated: true
+      operationId: localScan
+      parameters:
+      - description: Input phone number
+        in: path
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.ScanResultResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/number.Number'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.JSONResponse'
+      summary: Perform a scan using local phone number library.
+      tags:
+      - Numbers
+  /numbers/{number}/scan/numverify:
+    get:
+      deprecated: true
+      operationId: numverifyScan
+      parameters:
+      - description: Input phone number
+        in: path
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.ScanResultResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/remote.NumverifyScannerResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.JSONResponse'
+      summary: Perform a scan using Numverify's API.
+      tags:
+      - Numbers
+  /numbers/{number}/scan/ovh:
+    get:
+      deprecated: true
+      operationId: ovhScan
+      parameters:
+      - description: Input phone number
+        in: path
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.ScanResultResponse'
+            - properties:
+                result:
+                  $ref: '#/definitions/remote.OVHScannerResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.JSONResponse'
+      summary: Perform a scan using OVH's API.
+      tags:
+      - Numbers
+  /numbers/{number}/validate:
+    get:
+      deprecated: true
+      operationId: validate
+      parameters:
+      - description: Input phone number
+        in: path
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.JSONResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.JSONResponse'
+      summary: Check if a number is valid and possible.
+      tags:
+      - Numbers
+  /v2/numbers:
+    post:
+      consumes:
+      - application/json
+      description: This route returns information about a given phone number.
+      operationId: AddNumber
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AddNumberInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AddNumberResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Add a new number.
+      tags:
+      - Numbers
+  /v2/scanners:
+    get:
+      description: This route returns all available scanners.
+      operationId: GetAllScanners
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.GetAllScannersResponse'
+      summary: Get all available scanners.
+      tags:
+      - Numbers
+  /v2/scanners/{scanner}/dryrun:
+    post:
+      consumes:
+      - application/json
+      description: This route performs a dry run with the given phone number. This
+        doesn't perform an actual scan.
+      operationId: DryRunScanner
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.DryRunScannerInput'
+      - description: Scanner name
+        in: path
+        name: scanner
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.DryRunScannerResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Dry run a single scanner
+      tags:
+      - Numbers
+  /v2/scanners/{scanner}/run:
+    post:
+      consumes:
+      - application/json
+      description: This route runs a single scanner with the given phone number
+      operationId: RunScanner
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.RunScannerInput'
+      - description: Scanner name
+        in: path
+        name: scanner
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.RunScannerResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Run a single scanner
+      tags:
+      - Numbers
+schemes:
+- http
+- https
+swagger: "2.0"

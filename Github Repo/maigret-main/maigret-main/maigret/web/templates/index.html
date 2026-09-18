@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .main-search-section {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .search-button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.2rem;
+        margin-top: 2rem;
+    }
+</style>
+
+<div class="form-container">
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('live_start') }}" class="mb-4">
+        <div class="main-search-section">
+            <div class="mb-4">
+                <label for="usernames" class="form-label h5">Usernames to Search</label>
+                <textarea class="form-control" id="usernames" name="usernames" rows="3" required
+                    placeholder="Enter one or more usernames (separated by spaces or commas)..."></textarea>
+            </div>
+
+            <div class="btn-group" role="group" aria-label="Search mode">
+                <input type="radio" class="btn-check" name="mode" id="mode-fast" value="fast" checked>
+                <label class="btn btn-outline-secondary" for="mode-fast">Fast check ({{ web_settings.top_sites }} sites)</label>
+                <input type="radio" class="btn-check" name="mode" id="mode-full" value="full">
+                <label class="btn btn-outline-secondary" for="mode-full">Full check</label>
+            </div>
+        </div>
+
+        <p class="text-muted">
+            Filters, proxies and advanced options now live in
+            <a href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">Settings</a> (&#9881; top right).
+        </p>
+
+        <button type="submit" id="startBtn" class="btn search-button" style="background-color: rgb(249, 207, 0); color: black;">
+            Start Search
+        </button>
+    </form>
+</div>
+{% endblock %}

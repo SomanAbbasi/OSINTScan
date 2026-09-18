@@ -1,0 +1,786 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Advanced information gathering \u0026 OSINT framework for phone numbers.",
+        "title": "PhoneInfoga REST API",
+        "contact": {},
+        "license": {
+            "name": "GNU General Public License v3.0",
+            "url": "https://github.com/sundowndev/phoneinfoga/blob/master/LICENSE"
+        },
+        "version": "v2"
+    },
+    "host": "localhost:5000",
+    "basePath": "/api",
+    "paths": {
+        "/": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "General"
+                ],
+                "summary": "Check if service is healthy.",
+                "operationId": "healthCheck",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.healthResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/web.JSONResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/numbers": {
+            "get": {
+                "description": "This route is actually not used yet.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Fetch all previously scanned numbers.",
+                "operationId": "getAllNumbers",
+                "deprecated": true,
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.getAllNumbersResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/numbers/{number}/scan/googlesearch": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Perform a scan using Google Search engine.",
+                "operationId": "googleSearchScan",
+                "deprecated": true,
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Input phone number",
+                        "name": "number",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.ScanResultResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/remote.GoogleSearchResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.JSONResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/numbers/{number}/scan/local": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Perform a scan using local phone number library.",
+                "operationId": "localScan",
+                "deprecated": true,
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Input phone number",
+                        "name": "number",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.ScanResultResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/number.Number"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.JSONResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/numbers/{number}/scan/numverify": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Perform a scan using Numverify's API.",
+                "operationId": "numverifyScan",
+                "deprecated": true,
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Input phone number",
+                        "name": "number",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.ScanResultResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/remote.NumverifyScannerResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.JSONResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/numbers/{number}/scan/ovh": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Perform a scan using OVH's API.",
+                "operationId": "ovhScan",
+                "deprecated": true,
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Input phone number",
+                        "name": "number",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.ScanResultResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "result": {
+                                            "$ref": "#/definitions/remote.OVHScannerResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.JSONResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/numbers/{number}/validate": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Check if a number is valid and possible.",
+                "operationId": "validate",
+                "deprecated": true,
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Input phone number",
+                        "name": "number",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.JSONResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.JSONResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/numbers": {
+            "post": {
+                "description": "This route returns information about a given phone number.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Add a new number.",
+                "operationId": "AddNumber",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.AddNumberInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.AddNumberResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/scanners": {
+            "get": {
+                "description": "This route returns all available scanners.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Get all available scanners.",
+                "operationId": "GetAllScanners",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.GetAllScannersResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/scanners/{scanner}/dryrun": {
+            "post": {
+                "description": "This route performs a dry run with the given phone number. This doesn't perform an actual scan.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Dry run a single scanner",
+                "operationId": "DryRunScanner",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.DryRunScannerInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Scanner name",
+                        "name": "scanner",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.DryRunScannerResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/scanners/{scanner}/run": {
+            "post": {
+                "description": "This route runs a single scanner with the given phone number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Numbers"
+                ],
+                "summary": "Run a single scanner",
+                "operationId": "RunScanner",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.RunScannerInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Scanner name",
+                        "name": "scanner",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.RunScannerResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.AddNumberInput": {
+            "type": "object",
+            "required": [
+                "number"
+            ],
+            "properties": {
+                "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.AddNumberResponse": {
+            "type": "object",
+            "properties": {
+                "carrier": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "countryCode": {
+                    "type": "integer"
+                },
+                "e164": {
+                    "type": "string"
+                },
+                "international": {
+                    "type": "string"
+                },
+                "local": {
+                    "type": "string"
+                },
+                "rawLocal": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "handlers.DryRunScannerInput": {
+            "type": "object",
+            "required": [
+                "number",
+                "options"
+            ],
+            "properties": {
+                "number": {
+                    "type": "string"
+                },
+                "options": {
+                    "$ref": "#/definitions/remote.ScannerOptions"
+                }
+            }
+        },
+        "handlers.DryRunScannerResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "handlers.GetAllScannersResponse": {
+            "type": "object",
+            "properties": {
+                "scanners": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/handlers.Scanner"
+                    }
+                }
+            }
+        },
+        "handlers.RunScannerInput": {
+            "type": "object",
+            "required": [
+                "number",
+                "options"
+            ],
+            "properties": {
+                "number": {
+                    "type": "string"
+                },
+                "options": {
+                    "$ref": "#/definitions/remote.ScannerOptions"
+                }
+            }
+        },
+        "handlers.RunScannerResponse": {
+            "type": "object",
+            "properties": {
+                "result": {}
+            }
+        },
+        "handlers.Scanner": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "number.Number": {
+            "type": "object",
+            "properties": {
+                "carrier": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "countryCode": {
+                    "type": "integer"
+                },
+                "e164": {
+                    "type": "string"
+                },
+                "international": {
+                    "type": "string"
+                },
+                "local": {
+                    "type": "string"
+                },
+                "rawLocal": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "remote.GoogleSearchDork": {
+            "type": "object",
+            "properties": {
+                "dork": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "remote.GoogleSearchResponse": {
+            "type": "object",
+            "properties": {
+                "disposable_providers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/remote.GoogleSearchDork"
+                    }
+                },
+                "general": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/remote.GoogleSearchDork"
+                    }
+                },
+                "individuals": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/remote.GoogleSearchDork"
+                    }
+                },
+                "reputation": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/remote.GoogleSearchDork"
+                    }
+                },
+                "social_media": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/remote.GoogleSearchDork"
+                    }
+                }
+            }
+        },
+        "remote.NumverifyScannerResponse": {
+            "type": "object",
+            "properties": {
+                "carrier": {
+                    "type": "string"
+                },
+                "country_code": {
+                    "type": "string"
+                },
+                "country_name": {
+                    "type": "string"
+                },
+                "country_prefix": {
+                    "type": "string"
+                },
+                "international_format": {
+                    "type": "string"
+                },
+                "line_type": {
+                    "type": "string"
+                },
+                "local_format": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "remote.OVHScannerResponse": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "found": {
+                    "type": "boolean"
+                },
+                "number_range": {
+                    "type": "string"
+                },
+                "zip_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "remote.ScannerOptions": {
+            "type": "object",
+            "additionalProperties": true
+        },
+        "web.JSONResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "web.ScanResultResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "result": {},
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "web.getAllNumbersResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "numbers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/number.Number"
+                    }
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "web.healthResponse": {
+            "type": "object",
+            "properties": {
+                "commit": {
+                    "type": "string"
+                },
+                "demo": {
+                    "type": "boolean"
+                },
+                "success": {
+                    "type": "boolean"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

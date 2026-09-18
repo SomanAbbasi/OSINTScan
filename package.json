@@ -1,0 +1,27 @@
+{
+  "name": "handlescope",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HandleScope — Search your public username footprint across the web",
+  "scripts": {
+    "data:import": "python scripts/import-upstream-data.py",
+    "data:merge": "python scripts/merge-site-data.py",
+    "data:validate": "python scripts/validate-site-rules.py",
+    "data:test": "python scripts/test-site-rules.py",
+    "data:update": "python scripts/check-upstream-updates.py",
+    "clean": "npm --prefix frontend run clean",
+    "dev:backend": "uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload",
+    "test:backend": "pytest backend/tests -v",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "handlescope",
+    "osint",
+    "username-search",
+    "footprint-audit",
+    "whatsmyname"
+  ],
+  "author": "HandleScope Team",
+  "license": "CC-BY-SA-4.0"
+}

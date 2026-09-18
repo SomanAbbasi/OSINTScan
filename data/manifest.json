@@ -1,0 +1,15 @@
+{
+  "upstream_repository": "https://github.com/WebBreacher/WhatsMyName",
+  "upstream_commit_sha": "snapshot-pinned",
+  "file_sha256": "423d100be78ae4926bd501c346f2df4220bf829d3e838a39b7e62f5c1cc37c31",
+  "import_date": "2026-09-11T17:28:03.087549+00:00",
+  "total_sites": 716,
+  "enabled_sites": 715,
+  "disabled_sites": 1,
+  "categories_count": 21,
+  "authors_count": 8,
+  "dataset_license": "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)",
+  "dataset_copyright": "Copyright (C) 2015-2026 Micah Hoffman and contributors",
+  "generated_data_version": "1.0.0",
+  "provenance_notes": "Adapted and normalized for HandleScope public footprint auditing."
+}
