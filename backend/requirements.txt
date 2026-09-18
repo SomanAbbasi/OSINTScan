@@ -1,29 +1,43 @@
+# ==============================================================================
+# OSINTScan Backend Dependencies
+# ==============================================================================
+
+# Core Web Framework & ASGI Server
 fastapi>=0.110.0
-uvicorn>=0.28.0
+uvicorn[standard]>=0.28.0
+gunicorn>=21.2.0
+sse-starlette>=2.0.0
 pydantic>=2.6.0
 pydantic-settings>=2.2.0
-httpx>=0.27.0
-sse-starlette>=2.0.0
-pytest>=8.0.0
-pytest-asyncio>=0.23.0
-jsonschema>=4.21.0
-requests>=2.31.0
 python-dotenv>=1.0.0
-beautifulsoup4>=4.12.0
-rich>=13.0.0
+
+# HTTP & Asynchronous Networking
+httpx>=0.27.0
+requests>=2.31.0
+dnspython>=2.6.0
+
+# OSINT Intelligence & Parsing Engines
 phonenumbers>=8.13.0
+protobuf>=5.28.0
+beautifulsoup4>=4.12.0
+geopy>=2.4.0
+pillow>=10.0.0
+imagehash>=4.3.0
+
+# Terminal UI, Data Formatting & Utilities
+rich>=13.0.0
 termcolor>=2.3.0
 trio>=0.24.0
 jsonpickle>=3.0.0
-imagehash>=4.3.0
 beautifultable>=1.1.0
 alive-progress>=3.1.0
 autoslot>=2022.12.1
 humanize>=4.9.0
 inflection>=0.5.1
 rich-argparse>=1.5.0
-geopy>=2.4.0
-dnspython>=2.6.0
-protobuf>=5.28.0
-pillow>=10.0.0
 tqdm>=4.66.0
+jsonschema>=4.21.0
+
+# Testing & Quality Assurance
+pytest>=8.0.0
+pytest-asyncio>=0.23.0

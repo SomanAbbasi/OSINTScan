@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: osintscan-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - SCAN_MAX_CONCURRENCY=20
+      - CORS_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000"]
+    env_file:
+      - path: backend/.env
+        required: false
