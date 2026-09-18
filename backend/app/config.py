@@ -1,4 +1,7 @@
 import json
+import os
+import re
+import secrets
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, List, Optional, Union
@@ -50,8 +53,21 @@ class Settings(BaseSettings):
     
     # Admin Security
     ADMIN_API_KEY: str = "hs_admin_secret_key_change_in_production"
+
+    @field_validator("ADMIN_API_KEY", mode="before")
+    @classmethod
+    def validate_admin_api_key(cls, v: Any) -> str:
+        is_production = bool(
+            os.getenv("VERCEL")
+            or os.getenv("ENVIRONMENT", "").lower() == "production"
+        )
+        val = str(v).strip() if v else ""
+        if is_production and (not val or val == "hs_admin_secret_key_change_in_production"):
+            # Never permit the public default key in production; auto-generate a secure random token
+            return secrets.token_urlsafe(32)
+        return val or "hs_admin_secret_key_change_in_production"
     
-    # CORS - defaults to localhost for safe local dev, overridden by CORS_ORIGINS env var
+    # CORS Origins
     CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
@@ -61,21 +77,41 @@ class Settings(BaseSettings):
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v: Any) -> List[str]:
+        origins: List[str] = []
         if isinstance(v, str):
             v = v.strip()
             if v.startswith("[") and v.endswith("]"):
                 try:
-                    return json.loads(v)
+                    origins = json.loads(v)
                 except Exception:
-                    pass
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
+                    origins = [origin.strip() for origin in v.split(",") if origin.strip()]
+            else:
+                origins = [origin.strip() for origin in v.split(",") if origin.strip()]
         elif isinstance(v, (list, tuple, set)):
-            return list(v)
-        return [
-            "http://localhost:3000",
-            "http://127.0.0.1:3000",
-            "http://localhost:8000",
-        ]
+            origins = list(v)
+        else:
+            origins = [
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "http://localhost:8000",
+            ]
+
+        # Automatic Production Security: Ban localhost in production environments
+        is_production = bool(
+            os.getenv("VERCEL")
+            or os.getenv("ENVIRONMENT", "").lower() == "production"
+        )
+        if is_production:
+            # Strip out any localhost / 127.0.0.1 origins
+            origins = [
+                o for o in origins
+                if not re.search(r"://(localhost|127\.0\.0\.1)(:\d+)?$", o, re.IGNORECASE)
+            ]
+            # Ensure official production frontend domain is present if no custom origins given
+            if not origins:
+                origins = ["https://osint-scan.vercel.app"]
+
+        return origins
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
