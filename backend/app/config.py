@@ -1,6 +1,8 @@
+import json
 from functools import lru_cache
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, List, Optional, Union
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -49,15 +51,31 @@ class Settings(BaseSettings):
     # Admin Security
     ADMIN_API_KEY: str = "hs_admin_secret_key_change_in_production"
     
-    # CORS
-    CORS_ORIGINS: List[str] = [
+    # CORS - defaults to localhost for safe local dev, overridden by CORS_ORIGINS env var
+    CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
-        "https://osint-scan.vercel.app",
-        "https://osint-scan-backend.vercel.app",
-        "https://handlescope.org",
     ]
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Any) -> List[str]:
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("[") and v.endswith("]"):
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        elif isinstance(v, (list, tuple, set)):
+            return list(v)
+        return [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://localhost:8000",
+        ]
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
