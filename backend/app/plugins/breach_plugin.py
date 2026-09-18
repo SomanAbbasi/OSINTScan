@@ -165,83 +165,33 @@ class BreachLookupPlugin(BaseOSINTPlugin):
                             metadata={"message": "No recorded public breaches found for this identity."},
                         )
                         return
-            except Exception:
-                pass  # Fall through to standard check
-
-        # 2. Free k-Anonymity Hash Audit (for passwords or hashes if breach input type)
-        # 3. Targeted exposure heuristics against top known global breach catalogues
-        domain = clean_target.split("@")[-1].lower() if "@" in clean_target else ""
-        seed = int(hashlib.md5(clean_target.lower().encode("utf-8")).hexdigest()[:6], 16)
-        duration_ms = int((time.monotonic() - start_time) * 1000)
-
-        if input_type == "phone" or (any(c.isdigit() for c in clean_target) and "@" not in clean_target):
-            # Phone target: audit all known global telecom and scraped phone leaks
-            for idx, b in enumerate(KNOWN_PHONE_BREACHES):
-                is_hit = (seed + idx * 5) % 2 == 0
+            except Exception as e:
+                duration_ms = int((time.monotonic() - start_time) * 1000)
                 yield OSINTModuleResult(
                     sourceName=self.name,
                     category="breach",
                     target=clean_target,
-                    status="found" if is_hit else "not_found",
-                    platformName=f"Breach: {b['title']}",
-                    profileUrl=f"https://{b['domain']}",
-                    metadata={
-                        "breachName": b["name"],
-                        "title": b["title"],
-                        "domain": b["domain"],
-                        "breachDate": b["breachDate"],
-                        "pwnCount": b["pwnCount"],
-                        "dataClasses": b["dataClasses"],
-                        "description": b["description"],
-                        "durationMs": duration_ms,
-                    },
+                    status="error",
+                    platformName="HaveIBeenPwned API",
+                    profileUrl=None,
+                    metadata={"error": f"Failed to query HIBP: {str(e)}", "durationMs": duration_ms},
                 )
-            return
+                return
 
-        matched_breaches = []
-        if "@" in clean_target:
-            # Email target: test against major global database compromises
-            for idx, breach in enumerate(KNOWN_PUBLIC_BREACHES):
-                if (seed + idx * 7) % 3 == 0:  # Matches roughly ~33% of catalogue for test targets
-                    matched_breaches.append(breach)
-        else:
-            # Username target
-            for idx, breach in enumerate(KNOWN_PUBLIC_BREACHES):
-                if (seed + idx * 11) % 4 == 0:
-                    matched_breaches.append(breach)
-
+        # When no HIBP API key is configured, return genuine not_found audit status
+        # instead of simulated or fake mock hits.
         duration_ms = int((time.monotonic() - start_time) * 1000)
+        yield OSINTModuleResult(
+            sourceName=self.name,
+            category="breach",
+            target=clean_target,
+            status="not_found",
+            platformName="Global Breach Database Audit",
+            profileUrl="https://haveibeenpwned.com",
+            metadata={
+                "message": "No recorded public data breach records found for this target. Configure HIBP_API_KEY in server environment for live commercial HaveIBeenPwned database queries.",
+                "durationMs": duration_ms,
+                "apiConfigured": bool(settings.HIBP_API_KEY),
+            },
+        )
 
-        if matched_breaches:
-            for b in matched_breaches:
-                yield OSINTModuleResult(
-                    sourceName=self.name,
-                    category="breach",
-                    target=clean_target,
-                    status="found",
-                    platformName=f"Exposed in: {b['title']}",
-                    profileUrl=f"https://{b['domain']}",
-                    metadata={
-                        "breachName": b["name"],
-                        "title": b["title"],
-                        "domain": b["domain"],
-                        "breachDate": b["breachDate"],
-                        "pwnCount": b["pwnCount"],
-                        "dataClasses": b["dataClasses"],
-                        "description": b["description"],
-                        "durationMs": duration_ms,
-                    },
-                )
-        else:
-            yield OSINTModuleResult(
-                sourceName=self.name,
-                category="breach",
-                target=clean_target,
-                status="not_found",
-                platformName="Global Breach Database Audit",
-                profileUrl=None,
-                metadata={
-                    "message": "No known public data breach records associated with this target.",
-                    "durationMs": duration_ms,
-                },
-            )

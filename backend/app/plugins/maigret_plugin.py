@@ -6,6 +6,7 @@ from typing import Any, AsyncIterator, Dict, List, Optional
 import httpx
 
 from backend.app.config import get_settings
+from backend.app.core.classifier import UNIVERSAL_NOT_FOUND_PATTERNS
 from backend.app.plugins.base import BaseOSINTPlugin
 from backend.app.schemas.scan import OSINTModuleResult
 
@@ -141,20 +142,100 @@ class MaigretPlugin(BaseOSINTPlugin):
                         await result_queue.put(res)
                         return
 
+                    # 1. Anti-bot and access restriction statuses
+                    if status_code in (401, 403, 503):
+                        res = OSINTModuleResult(
+                            sourceName=self.name,
+                            category="username",
+                            target=target,
+                            status="rate_limited",
+                            platformName=site_name,
+                            profileUrl=None,
+                            metadata={
+                                "site": site_name,
+                                "urlMain": site_data.get("urlMain"),
+                                "statusCode": status_code,
+                                "reason": f"HTTP {status_code} Access Denied / Protected.",
+                                "durationMs": duration_ms,
+                            },
+                        )
+                        await result_queue.put(res)
+                        return
+
+                    # 2. Standard 404 / 410 -> Not found
+                    if status_code in (404, 410):
+                        res = OSINTModuleResult(
+                            sourceName=self.name,
+                            category="username",
+                            target=target,
+                            status="not_found",
+                            platformName=site_name,
+                            profileUrl=None,
+                            metadata={
+                                "site": site_name,
+                                "urlMain": site_data.get("urlMain"),
+                                "statusCode": status_code,
+                                "durationMs": duration_ms,
+                            },
+                        )
+                        await result_queue.put(res)
+                        return
+
+                    # 3. Redirect validation
+                    if resp.history:
+                        final_path = resp.url.path.rstrip("/")
+                        if final_path in ("", "/login", "/signin", "/signup", "/register", "/home", "/explore", "/404", "/error", "/search"):
+                            res = OSINTModuleResult(
+                                sourceName=self.name,
+                                category="username",
+                                target=target,
+                                status="not_found",
+                                platformName=site_name,
+                                profileUrl=None,
+                                metadata={
+                                    "site": site_name,
+                                    "urlMain": site_data.get("urlMain"),
+                                    "reason": f"Redirected to non-profile path {resp.url.path}",
+                                    "durationMs": duration_ms,
+                                },
+                            )
+                            await result_queue.put(res)
+                            return
+
+                    # 4. Soft-404 verification
+                    body_lower = body_text.lower()
+                    if any(p in body_lower for p in UNIVERSAL_NOT_FOUND_PATTERNS):
+                        res = OSINTModuleResult(
+                            sourceName=self.name,
+                            category="username",
+                            target=target,
+                            status="not_found",
+                            platformName=site_name,
+                            profileUrl=None,
+                            metadata={
+                                "site": site_name,
+                                "urlMain": site_data.get("urlMain"),
+                                "reason": "Universal soft-404 signature detected in body.",
+                                "durationMs": duration_ms,
+                            },
+                        )
+                        await result_queue.put(res)
+                        return
+
                     is_found = False
 
-                    if check_type == "message":
-                        is_absence = any(s in body_text for s in absence_strs) if absence_strs else False
-                        is_presence = any(s in body_text for s in presence_strs) if presence_strs else True
-                        if not is_absence and is_presence and status_code < 400:
+                    if 200 <= status_code < 300:
+                        if check_type == "message":
+                            is_absence = any(s in body_text for s in absence_strs) if absence_strs else False
+                            is_presence = any(s in body_text for s in presence_strs) if presence_strs else True
+                            if not is_absence and is_presence:
+                                is_found = True
+                        elif check_type == "status_code":
                             is_found = True
-                    elif check_type == "status_code":
-                        if 200 <= status_code < 300:
-                            is_found = True
-                    elif check_type == "response_url":
-                        is_presence = any(s in body_text for s in presence_strs) if presence_strs else True
-                        if 200 <= status_code < 300 and is_presence:
-                            is_found = True
+                        elif check_type == "response_url":
+                            is_presence = any(s in body_text for s in presence_strs) if presence_strs else True
+                            if is_presence:
+                                is_found = True
 
                     final_status = "found" if is_found else "not_found"
 

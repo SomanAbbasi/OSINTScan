@@ -89,25 +89,27 @@ class GHuntPlugin(BaseOSINTPlugin):
 
                 # 2. Public profile avatar probe
                 try:
-                    # Probe Google public photo lookup endpoint
-                    probe_url = f"https://lh3.googleusercontent.com/a/default-user"
                     avatar_url = f"https://www.google.com/s2/photos/public/{clean_email}"
                     probe_resp = await client.get(avatar_url, follow_redirects=True)
-                    if probe_resp.status_code == 200 and len(probe_resp.content) > 100:
+                    # Check if response returned a real custom photo instead of default placeholder
+                    url_str = str(probe_resp.url).lower()
+                    if (
+                        probe_resp.status_code == 200
+                        and "default-user" not in url_str
+                        and "default" not in url_str
+                        and "image" in probe_resp.headers.get("content-type", "")
+                        and len(probe_resp.content) > 1200
+                    ):
                         account_found = True
-                        if "image" in probe_resp.headers.get("content-type", ""):
-                            # It has a valid profile photo
-                            custom_picture = True
+                        custom_picture = True
                 except Exception:
                     pass
 
-                # 3. Check Google public services indicator
+                # 3. Identify possible services without falsely claiming account existence
                 if is_gmail:
-                    account_found = True
-                    services.extend(["Gmail", "Google Drive", "Google Maps", "YouTube", "Google Calendar"])
+                    services.append("Gmail Domain")
                 elif is_workspace:
-                    account_found = True
-                    services.extend(["Google Workspace", "Google Meet", "Google Drive", "Google Docs"])
+                    services.append("Google Workspace Domain")
 
         duration_ms = int((time.monotonic() - start_time) * 1000)
 
@@ -136,8 +138,8 @@ class GHuntPlugin(BaseOSINTPlugin):
             metadata=metadata,
         )
 
-        # If GAIA ID exists or Maps is known, yield Google Maps specific footprint
-        if gaia_id or is_gmail:
+        # If GAIA ID exists or account is confirmed, yield Google Maps specific footprint
+        if gaia_id or account_found:
             yield OSINTModuleResult(
                 sourceName=self.name,
                 category="email",

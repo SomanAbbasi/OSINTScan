@@ -7,6 +7,7 @@ from typing import Any, AsyncIterator, Dict, List, Optional
 import httpx
 
 from backend.app.config import get_settings
+from backend.app.core.classifier import UNIVERSAL_NOT_FOUND_PATTERNS
 from backend.app.plugins.base import BaseOSINTPlugin
 from backend.app.schemas.scan import OSINTModuleResult
 
@@ -152,10 +153,11 @@ class BlackbirdPlugin(BaseOSINTPlugin):
 
                     body = resp.text
                     is_found = False
-                    if resp.status_code == e_code:
+                    if resp.status_code == e_code and resp.status_code < 400:
                         if not e_string or (e_string in body):
                             if not m_string or (m_string not in body):
-                                is_found = True
+                                if not any(p in body.lower() for p in UNIVERSAL_NOT_FOUND_PATTERNS):
+                                    is_found = True
 
                     metadata: Dict[str, Any] = {
                         "category": site.get("cat", "social"),
@@ -254,7 +256,16 @@ class BlackbirdPlugin(BaseOSINTPlugin):
                     is_found = False
                     json_data = None
 
-                    if is_json:
+                    # 1. Anti-bot or access denied statuses can never be found
+                    if resp.status_code in (401, 403, 503):
+                        is_found = False
+                    elif resp.status_code in (404, 410):
+                        is_found = False
+                    elif resp.history and resp.url.path.rstrip("/") in ("", "/login", "/signin", "/signup", "/register", "/home", "/explore", "/404", "/error", "/search"):
+                        is_found = False
+                    elif not is_json and any(p in body.lower() for p in UNIVERSAL_NOT_FOUND_PATTERNS):
+                        is_found = False
+                    elif is_json:
                         if resp.status_code == 200:
                             try:
                                 json_data = resp.json()

@@ -180,7 +180,7 @@ class PhoneInfogaPlugin(BaseOSINTPlugin):
             },
         )
 
-        # 3. Direct Messaging & Communications Platforms
+        # 3. Direct Messaging & Communications Platforms (Direct Links)
         messaging_apps = [
             ("WhatsApp Messenger", f"https://wa.me/{clean_digits}", "whatsapp.com"),
             ("Telegram Messenger", f"https://t.me/+{clean_digits}", "telegram.org"),
@@ -193,7 +193,7 @@ class PhoneInfogaPlugin(BaseOSINTPlugin):
                 sourceName=self.name,
                 category="phone",
                 target=e164,
-                status="found",
+                status="info",
                 platformName=app_name,
                 profileUrl=app_url,
                 metadata={
@@ -219,7 +219,7 @@ class PhoneInfogaPlugin(BaseOSINTPlugin):
                 sourceName=self.name,
                 category="phone",
                 target=e164,
-                status="found",
+                status="info",
                 platformName=f"PhoneInfoga: {label}",
                 profileUrl=dork_url,
                 metadata={
@@ -243,7 +243,7 @@ class PhoneInfogaPlugin(BaseOSINTPlugin):
                 sourceName=self.name,
                 category="phone",
                 target=e164,
-                status="found",
+                status="info",
                 platformName=f"PhoneInfoga: {dir_name}",
                 profileUrl=formatted_url,
                 metadata={
@@ -264,7 +264,7 @@ class PhoneInfogaPlugin(BaseOSINTPlugin):
                 sourceName=self.name,
                 category="phone",
                 target=e164,
-                status="found",
+                status="info",
                 platformName=f"PhoneInfoga: {rep_name}",
                 profileUrl=formatted_url,
                 metadata={
@@ -324,7 +324,7 @@ class PhoneInfogaPlugin(BaseOSINTPlugin):
                 sourceName=self.name,
                 category="phone",
                 target=e164,
-                status="found",
+                status="info",
                 platformName=f"PhoneInfoga: {dork_label}",
                 profileUrl=dork_url,
                 metadata={
@@ -340,7 +340,7 @@ class PhoneInfogaPlugin(BaseOSINTPlugin):
             sourceName=self.name,
             category="phone",
             target=e164,
-            status="found",
+            status="info",
             platformName="PhoneInfoga: CountryCode Regional Dialing Registry",
             profileUrl=f"https://countrycode.org/",
             metadata={
@@ -355,7 +355,7 @@ class PhoneInfogaPlugin(BaseOSINTPlugin):
             sourceName=self.name,
             category="phone",
             target=e164,
-            status="found",
+            status="info",
             platformName="PhoneInfoga: DIDWW Area Prefixes Database",
             profileUrl="https://directory.didww.com/area-prefixes",
             metadata={

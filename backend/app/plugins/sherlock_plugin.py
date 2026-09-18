@@ -6,6 +6,7 @@ from typing import Any, AsyncIterator, Dict, List, Optional
 import httpx
 
 from backend.app.config import get_settings
+from backend.app.core.classifier import UNIVERSAL_NOT_FOUND_PATTERNS
 from backend.app.plugins.base import BaseOSINTPlugin
 from backend.app.schemas.scan import OSINTModuleResult
 
@@ -138,30 +139,111 @@ class SherlockPlugin(BaseOSINTPlugin):
                         await result_queue.put(res)
                         return
 
-                    # Evaluate status based on errorType
+                    # 1. Anti-bot and access restriction statuses
+                    if status_code in (401, 403, 503):
+                        res = OSINTModuleResult(
+                            sourceName=self.name,
+                            category="username",
+                            target=target,
+                            status="rate_limited",
+                            platformName=site_name,
+                            profileUrl=None,
+                            metadata={
+                                "site": site_name,
+                                "urlMain": site_data.get("urlMain"),
+                                "statusCode": status_code,
+                                "reason": f"HTTP {status_code} Access Denied / Protected.",
+                                "durationMs": duration_ms,
+                            },
+                        )
+                        await result_queue.put(res)
+                        return
+
+                    # 2. Standard 404 / 410 -> Not found immediately
+                    if status_code in (404, 410):
+                        res = OSINTModuleResult(
+                            sourceName=self.name,
+                            category="username",
+                            target=target,
+                            status="not_found",
+                            platformName=site_name,
+                            profileUrl=None,
+                            metadata={
+                                "site": site_name,
+                                "urlMain": site_data.get("urlMain"),
+                                "statusCode": status_code,
+                                "durationMs": duration_ms,
+                            },
+                        )
+                        await result_queue.put(res)
+                        return
+
+                    # 3. Redirect validation: if redirected away from profile path to root/login/search
+                    if resp.history:
+                        final_path = resp.url.path.rstrip("/")
+                        if final_path in ("", "/login", "/signin", "/signup", "/register", "/home", "/explore", "/404", "/error", "/search"):
+                            res = OSINTModuleResult(
+                                sourceName=self.name,
+                                category="username",
+                                target=target,
+                                status="not_found",
+                                platformName=site_name,
+                                profileUrl=None,
+                                metadata={
+                                    "site": site_name,
+                                    "urlMain": site_data.get("urlMain"),
+                                    "reason": f"Redirected to non-profile path {resp.url.path}",
+                                    "durationMs": duration_ms,
+                                },
+                            )
+                            await result_queue.put(res)
+                            return
+
+                    # 4. Soft-404 verification
+                    body_lower = body_text.lower()
+                    if any(p in body_lower for p in UNIVERSAL_NOT_FOUND_PATTERNS):
+                        res = OSINTModuleResult(
+                            sourceName=self.name,
+                            category="username",
+                            target=target,
+                            status="not_found",
+                            platformName=site_name,
+                            profileUrl=None,
+                            metadata={
+                                "site": site_name,
+                                "urlMain": site_data.get("urlMain"),
+                                "reason": "Universal soft-404 signature detected in body.",
+                                "durationMs": duration_ms,
+                            },
+                        )
+                        await result_queue.put(res)
+                        return
+
+                    # 5. Evaluate status based on errorType only if 200 <= status_code < 300
                     is_claimed = False
                     is_available = False
 
-                    if "message" in error_types:
-                        # If any error message is found in the response body, username is available (not found)
-                        if any(msg in body_text for msg in error_msgs):
-                            is_available = True
-                        else:
-                            is_claimed = True
+                    if 200 <= status_code < 300:
+                        if "message" in error_types:
+                            if any(msg in body_text for msg in error_msgs):
+                                is_available = True
+                            else:
+                                is_claimed = True
 
-                    if "status_code" in error_types and not is_available:
-                        if error_codes and status_code in error_codes:
-                            is_available = True
-                        elif status_code >= 300 or status_code < 200:
-                            is_available = True
-                        else:
-                            is_claimed = True
+                        if "status_code" in error_types and not is_available:
+                            if error_codes and status_code in error_codes:
+                                is_available = True
+                            else:
+                                is_claimed = True
 
-                    if "response_url" in error_types and not is_available:
-                        if 200 <= status_code < 300:
-                            is_claimed = True
-                        else:
-                            is_available = True
+                        if "response_url" in error_types and not is_available:
+                            error_url = site_data.get("errorUrl")
+                            if error_url and error_url in str(resp.url):
+                                is_available = True
+                            else:
+                                is_claimed = True
+                    else:
+                        is_available = True
 
                     final_status = "found" if is_claimed and not is_available else "not_found"
 

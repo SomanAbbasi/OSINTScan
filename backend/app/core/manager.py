@@ -84,9 +84,13 @@ class ScanSession:
             "found": PlatformStatus.FOUND,
             "not_found": PlatformStatus.NOT_FOUND,
             "rate_limited": PlatformStatus.RATE_LIMITED,
+            "blocked": PlatformStatus.BLOCKED,
+            "uncertain": PlatformStatus.UNCERTAIN,
+            "info": PlatformStatus.UNCERTAIN,
+            "lookup": PlatformStatus.UNCERTAIN,
             "error": PlatformStatus.ERROR,
         }
-        platform_status = status_map.get(osint_res.status.lower(), PlatformStatus.ERROR)
+        platform_status = status_map.get(osint_res.status.lower(), PlatformStatus.UNCERTAIN)
         display_name = osint_res.platformName or f"{osint_res.sourceName} Match"
         canon_key = canonical_platform_key(display_name)
         platform_id = f"platform_{canon_key}"

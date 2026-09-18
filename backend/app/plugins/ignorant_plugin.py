@@ -116,13 +116,13 @@ class IgnorantPlugin(BaseOSINTPlugin):
             },
         )
 
-        # 2. WhatsApp Direct Chat & Presence
+        # 2. WhatsApp Direct Chat & Presence (Direct Chat Link)
         wa_url = f"https://wa.me/{clean_digits}"
         yield OSINTModuleResult(
             sourceName=self.name,
             category="phone",
             target=e164,
-            status="found",
+            status="info",
             platformName="WhatsApp Messenger",
             profileUrl=wa_url,
             metadata={
@@ -133,13 +133,13 @@ class IgnorantPlugin(BaseOSINTPlugin):
             },
         )
 
-        # 3. Telegram Messenger
+        # 3. Telegram Messenger (Direct Chat Link)
         tg_url = f"https://t.me/+{clean_digits}"
         yield OSINTModuleResult(
             sourceName=self.name,
             category="phone",
             target=e164,
-            status="found",
+            status="info",
             platformName="Telegram",
             profileUrl=tg_url,
             metadata={
@@ -149,13 +149,13 @@ class IgnorantPlugin(BaseOSINTPlugin):
             },
         )
 
-        # 4. Viber Messenger
+        # 4. Viber Messenger (Direct Link)
         viber_url = "https://chats.viber.com"
         yield OSINTModuleResult(
             sourceName=self.name,
             category="phone",
             target=e164,
-            status="found",
+            status="info",
             platformName="Viber",
             profileUrl=viber_url,
             metadata={
@@ -165,13 +165,13 @@ class IgnorantPlugin(BaseOSINTPlugin):
             },
         )
 
-        # 5. Truecaller Directory Profile
+        # 5. Truecaller Directory Lookup
         tc_url = f"https://www.truecaller.com/search/{country_code}/{phone_number}"
         yield OSINTModuleResult(
             sourceName=self.name,
             category="phone",
             target=e164,
-            status="found",
+            status="info",
             platformName="Truecaller Directory",
             profileUrl=tc_url,
             metadata={

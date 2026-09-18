@@ -68,3 +68,25 @@ def test_classify_blocked_cloudflare():
     )
     assert status == PlatformStatus.BLOCKED
     assert confidence == ConfidenceLevel.MANUAL_REVIEW
+
+
+def test_classify_universal_soft_404():
+    status, confidence, reason = classify_response(
+        status_code=200,
+        body_text="<html><div>Sorry, this page isn't available</div></html>",
+        e_code=200,
+        e_string="",
+    )
+    assert status == PlatformStatus.NOT_FOUND
+    assert confidence == ConfidenceLevel.HIGH
+    assert "soft-404" in reason
+
+
+def test_classify_403_never_found():
+    status, confidence, reason = classify_response(
+        status_code=403,
+        body_text="Forbidden",
+        e_code=403,
+    )
+    assert status == PlatformStatus.BLOCKED
+
