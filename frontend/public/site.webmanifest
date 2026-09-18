@@ -1,0 +1,26 @@
+{
+  "name": "OSINTScan \u2014 Public Digital Footprint Search",
+  "short_name": "OSINTScan",
+  "description": "Search usernames, emails, and phone numbers across publicly accessible sources.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0B132B",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
