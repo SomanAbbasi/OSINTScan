@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://whatsmyname.app";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://osintscan.org";
 
   return {
     rules: {
@@ -10,7 +10,9 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         "/api/",
         "/scans/",
-        "/*?*username=*", // Avoid indexing ephemeral user search query URLs
+        "/*?*username=*", // Disallow indexing of ephemeral query parameter variations
+        "/*?*email=*",
+        "/*?*phone=*",
       ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,

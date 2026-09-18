@@ -2,11 +2,30 @@ import fs from "fs";
 import path from "path";
 import { PlatformDisplay } from "./types";
 
+const PLATFORM_ALIASES: Record<string, string> = {
+  "github-username-search": "github-user",
+  "github": "github-user",
+  "reddit-username-search": "reddit",
+  "instagram-username-search": "instagram",
+  "x-username-search": "x",
+  "twitter-username-search": "x",
+  "twitter": "x",
+  "youtube-username-search": "youtube-channel",
+  "youtube": "youtube-channel",
+  "gitlab-username-search": "gitlab",
+  "steam-username-search": "steam",
+  "pinterest-username-search": "pinterest",
+  "medium-username-search": "medium",
+  "telegram-username-search": "telegram",
+  "spotify-username-search": "spotify",
+  "tiktok-username-search": "tiktok",
+};
+
 export function getAllPlatforms(): PlatformDisplay[] {
   try {
     const filePath = path.join(process.cwd(), "..", "data", "platform-display.json");
     if (!fs.existsSync(filePath)) {
-      // Fallback if running from root
+      // Fallback if running from root or production
       const rootPath = path.join(process.cwd(), "data", "platform-display.json");
       if (fs.existsSync(rootPath)) {
         const content = fs.readFileSync(rootPath, "utf-8");
@@ -23,6 +42,33 @@ export function getAllPlatforms(): PlatformDisplay[] {
 
 export function getPlatformBySlug(slug: string): PlatformDisplay | null {
   const all = getAllPlatforms();
-  const target = slug.toLowerCase();
-  return all.find((p) => p.slug.toLowerCase() === target || p.id.toLowerCase() === target) || null;
+  let target = slug.toLowerCase();
+
+  // Check alias dictionary
+  if (PLATFORM_ALIASES[target]) {
+    target = PLATFORM_ALIASES[target];
+  }
+
+  // Also handle generic "-username-search" suffix
+  if (target.endsWith("-username-search")) {
+    const stripped = target.replace("-username-search", "");
+    if (PLATFORM_ALIASES[stripped]) {
+      target = PLATFORM_ALIASES[stripped];
+    } else {
+      const match = all.find(
+        (p) => p.slug.toLowerCase() === stripped || p.id.toLowerCase() === stripped
+      );
+      if (match) return match;
+    }
+  }
+
+  return (
+    all.find(
+      (p) =>
+        p.slug.toLowerCase() === target ||
+        p.id.toLowerCase() === target ||
+        p.displayName.toLowerCase().replace(/[^a-z0-9]/g, "") ===
+          target.replace(/[^a-z0-9]/g, "")
+    ) || null
+  );
 }

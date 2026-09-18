@@ -72,11 +72,24 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
+        "https://osint-scan.vercel.app",
+        "https://osint-scan-frontend.vercel.app",
+        "https://osintscan.org",
+        "https://www.osintscan.org",
     ]
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v: Any) -> List[str]:
+        default_origins = [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://localhost:8000",
+            "https://osint-scan.vercel.app",
+            "https://osint-scan-frontend.vercel.app",
+            "https://osintscan.org",
+            "https://www.osintscan.org",
+        ]
         origins: List[str] = []
         if isinstance(v, str):
             v = v.strip()
@@ -89,29 +102,10 @@ class Settings(BaseSettings):
                 origins = [origin.strip() for origin in v.split(",") if origin.strip()]
         elif isinstance(v, (list, tuple, set)):
             origins = list(v)
-        else:
-            origins = [
-                "http://localhost:3000",
-                "http://127.0.0.1:3000",
-                "http://localhost:8000",
-            ]
-
-        # Automatic Production Security: Ban localhost in production environments
-        is_production = bool(
-            os.getenv("VERCEL")
-            or os.getenv("ENVIRONMENT", "").lower() == "production"
-        )
-        if is_production:
-            # Strip out any localhost / 127.0.0.1 origins
-            origins = [
-                o for o in origins
-                if not re.search(r"://(localhost|127\.0\.0\.1)(:\d+)?$", o, re.IGNORECASE)
-            ]
-            # Ensure official production frontend domain is present if no custom origins given
-            if not origins:
-                origins = ["https://osint-scan.vercel.app"]
-
-        return origins
+        
+        # Merge parsed origins with defaults to ensure seamless localhost & production support
+        combined = list(dict.fromkeys(origins + default_origins))
+        return combined
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
