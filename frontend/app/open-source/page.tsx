@@ -4,9 +4,9 @@ import { constructMetadata } from "@/lib/seo";
 import { Heart, ExternalLink, Code2, ShieldAlert } from "lucide-react";
 
 export const metadata = constructMetadata({
-  title: "Open Source Attribution & Licensing | WhatsMyName",
+  title: "Open Source Attribution & Licensing",
   description:
-    "Attribution disclosure and licensing details for the community-maintained WhatsMyName dataset adapted by WhatsMyName under Creative Commons CC BY-SA 4.0.",
+    "Attribution disclosure and licensing details for the community-maintained WhatsMyName dataset adapted by OSINTScan under Creative Commons CC BY-SA 4.0.",
   canonical: "/open-source",
 });
 

@@ -4,9 +4,9 @@ import { ScanWorkspace } from "@/components/scan-workspace";
 import { Globe, Layers } from "lucide-react";
 
 export const metadata = constructMetadata({
-  title: "Check Username Across Platforms in Real Time | WhatsMyName",
+  title: "Check Username Across Platforms in Real Time",
   description:
-    "Fast, unified cross-platform username checker. Search across hundreds of public websites with confidence labels and exportable reports.",
+    "Fast, unified cross-platform username checker. Search across 600+ public websites with real-time SSE streaming, confidence scoring, and exportable reports with OSINTScan.",
   canonical: "/check-username-across-platforms",
 });
 
@@ -22,7 +22,7 @@ export default function CheckAcrossPlatformsPage() {
           Check Username Across Platforms
         </h1>
         <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-          One search, 700+ websites. Audit your public footprint across developer portals, social channels, and discussion forums.
+          One search, 600+ websites. Audit your public footprint across developer portals, social channels, and discussion forums.
         </p>
       </div>
 

@@ -4,9 +4,9 @@ import { ScanWorkspace } from "@/components/scan-workspace";
 import { MessageSquare, Users, Globe } from "lucide-react";
 
 export const metadata = constructMetadata({
-  title: "Social Media Username Search Across 700+ Networks | WhatsMyName",
+  title: "Social Media Username Search Across 600+ Networks",
   description:
-    "Search any handle across hundreds of social networks, discussion boards, and creator platforms in seconds with WhatsMyName.",
+    "Search any handle across hundreds of social networks, discussion boards, and creator platforms in seconds with OSINTScan.",
   canonical: "/social-media-username-search",
 });
 

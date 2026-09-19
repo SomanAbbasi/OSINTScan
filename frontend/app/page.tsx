@@ -75,18 +75,18 @@ export default function HomePage() {
       <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center space-y-6">
         {/* Eyebrow */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-[11px] font-semibold text-slate-700 tracking-wider uppercase">
-          <span>Public Digital Footprint Search</span>
+          <span>Free Username Search & OSINT Scanner</span>
         </div>
 
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight max-w-3xl mx-auto leading-tight">
-          Discover your{" "}
-          <span className="text-slate-950">public digital footprint.</span>
+          Free Username Search across{" "}
+          <span className="text-slate-950">600+ Social Media Platforms.</span>
         </h1>
 
         {/* Supporting Copy */}
         <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          Search usernames, email addresses, and phone numbers across publicly accessible sources with transparent, privacy-first OSINT scanning.
+          Search any username, find linked public profiles, and audit digital footprints across 600+ sites with real-time, privacy-first OSINT scanning. 100% free with zero logs.
         </p>
 
         {/* Primary Interactive Search Workspace */}

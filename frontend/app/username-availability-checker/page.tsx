@@ -4,9 +4,9 @@ import { ScanWorkspace } from "@/components/scan-workspace";
 import { CheckCircle2, Sparkles } from "lucide-react";
 
 export const metadata = constructMetadata({
-  title: "Username Availability Checker Across 700+ Sites | WhatsMyName",
+  title: "Username Availability Checker Across 600+ Sites",
   description:
-    "Check if your desired handle is available or taken across hundreds of social networks, developer hubs, and communities in seconds.",
+    "Check if your desired handle is available or taken across hundreds of social networks, developer hubs, and communities in seconds with OSINTScan.",
   canonical: "/username-availability-checker",
 });
 

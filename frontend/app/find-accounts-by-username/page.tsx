@@ -3,9 +3,9 @@ import { constructMetadata } from "@/lib/seo";
 import { ToolPageTemplate } from "@/components/tool-page-template";
 
 export const metadata = constructMetadata({
-  title: "Find Accounts by Username Across 700+ Sites | OSINTScan",
+  title: "Find Accounts by Username Across 600+ Sites",
   description:
-    "Discover public social media accounts, developer profiles, and online footprints associated with any handle across hundreds of websites. Fast and privacy-safe.",
+    "Discover public social media accounts, developer profiles, and online footprints associated with any handle across hundreds of websites. Fast and privacy-safe with OSINTScan.",
   canonical: "/find-accounts-by-username",
 });
 
