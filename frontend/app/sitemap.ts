@@ -3,7 +3,7 @@ import { GUIDES } from "@/lib/guides";
 import { getAllPlatforms } from "@/lib/platforms";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://osintscan.org";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.osintscan.app";
   const now = new Date().toISOString();
 
   // Core static & primary tool landing pages

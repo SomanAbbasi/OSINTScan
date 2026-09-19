@@ -1,0 +1,32 @@
+# OSINTScan
+
+> OSINTScan (https://www.osintscan.app) is an open-source, privacy-first digital footprint auditing and OSINT (Open Source Intelligence) investigation platform. It detects public profiles and online footprints across 600+ platforms in real-time with zero database logging.
+
+OSINTScan provides instant reverse username lookup, email footprint verification, and international phone intelligence with ephemeral in-memory processing. It is built for cybersecurity researchers, privacy advocates, ethical hackers, fraud investigators, and individuals auditing their own digital attack surface.
+
+## Core Capabilities & Features
+- **Real-Time Username Search**: Asynchronously scans 600+ social media, developer, gaming, forum, and blogging networks (e.g., GitHub, Reddit, Instagram, TikTok, Telegram, Steam, Twitch, Substack) using Server-Sent Events (SSE) streaming.
+- **Reverse Email Footprint Detection**: Verifies domain MX records, disposable email detection, SMTP validity, and public service footprint indicators without sending test messages.
+- **Phone Number Intelligence**: Formats numbers to international E.164, detects country/region, telecom carrier, and line type (mobile vs. landline vs. VoIP).
+- **Privacy by Architecture**: 100% ephemeral in-memory processing. No user queries, IP addresses, or scan results are ever stored in a database or sold to third parties.
+- **Open Source & Free**: Fully free to use with no account required, no paywalls, and no subscription tiers. Powered by open intelligence datasets (WhatsMyName project).
+- **Export Formats**: Instant download of scan results in CSV and structured JSON formats.
+
+## Key URLs & Directory
+- [Homepage & Real-Time Scanner](https://www.osintscan.app): Instant username scanning across 600+ sites.
+- [Supported Platforms Directory](https://www.osintscan.app/platforms): Searchable directory of all 600+ supported websites, categories, and detection methods.
+- [How OSINTScan Works](https://www.osintscan.app/how-it-works): Architecture, methodology, detection signatures, and ethical guidelines.
+- [OSINT Guides & Tutorials](https://www.osintscan.app/guides): Educational guides on digital footprint auditing, self-doxing prevention, and privacy hygiene.
+- [Frequently Asked Questions (FAQ)](https://www.osintscan.app/faq): Answers regarding privacy, accuracy, false positive handling, and legal compliance.
+- [Open Source & Community](https://www.osintscan.app/open-source): GitHub repository, WhatsMyName schema integration, and contribution guidelines.
+
+## Comparison to Alternative Tools
+- **vs Sherlock / Maigret**: Sherlock and Maigret are command-line terminal tools requiring local Python environments. OSINTScan provides a fast, modern web interface with live streaming results, categorizations, and mobile accessibility without any CLI installation.
+- **vs WhatsMyName Web**: OSINTScan builds on the WhatsMyName OSINT dataset, enhanced with real-time SSE streaming, category filters (Social, Dev, Gaming, Crypto), live progress indicators, and reverse email/phone modules.
+- **vs Namechk / KnowEm**: OSINTScan searches significantly more technical, developer, and international platforms (600+ vs ~50-100) and is open-source and non-commercial.
+
+## Developer & Technical Information
+- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS, Lucide icons. Hosted on Vercel Edge.
+- **Backend API**: FastAPI (Python 3.12), HTTPX asynchronous client with HTTP/2 and connection pooling.
+- **API Base**: https://api.osintscan.app
+- **Repository**: https://github.com/SomanAbbasi/OSINTScan

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://osintscan.org";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.osintscan.app";
 
 export function constructMetadata({
   title = "OSINTScan — Public Digital Footprint Search",
@@ -47,9 +47,13 @@ export function constructMetadata({
     robots: {
       index: !noIndex,
       follow: !noIndex,
+      nocache: false,
       googleBot: {
         index: !noIndex,
         follow: !noIndex,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
   };

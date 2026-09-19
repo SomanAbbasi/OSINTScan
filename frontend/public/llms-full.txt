@@ -1,0 +1,99 @@
+# OSINTScan — Full Technical & Reference Specification
+
+Website: https://www.osintscan.app  
+API Endpoint: https://api.osintscan.app  
+Source Code: https://github.com/SomanAbbasi/OSINTScan  
+License: MIT  
+
+---
+
+## 1. Executive Summary
+OSINTScan is an open-source, privacy-first cybersecurity and Open Source Intelligence (OSINT) web application. It enables investigators, security professionals, and everyday internet users to scan for usernames, verify email footprints, and analyze phone number metadata across the public web in real time.
+
+Unlike commercial people-search engines or data brokers that collect, aggregate, and sell personal information, OSINTScan operates strictly ephemerally:
+- Zero persistent database storage.
+- In-memory execution only.
+- No IP tracking or logging of search terms.
+- No user accounts or paywalls required.
+
+---
+
+## 2. Core Modules & Functionality
+
+### 2.1 Username Presence Detection
+- Searches across 600+ platforms covering social networks, developer hubs, discussion boards, blogs, crypto forums, and gaming services.
+- Uses high-concurrency asynchronous HTTP requests with HTTP/2 connection pooling.
+- Streamed in real-time to the browser via Server-Sent Events (SSE).
+- Classifies platforms into distinct categories:
+  - Social & Community (e.g. Reddit, Twitter/X, Instagram, TikTok, Threads)
+  - Developer & Tech (e.g. GitHub, GitLab, Docker Hub, PyPI, Stack Overflow, Dev.to)
+  - Gaming & Streaming (e.g. Steam, Twitch, Discord, Roblox, Xbox)
+  - Creative & Portfolio (e.g. Behance, Dribbble, Medium, Substack, SoundCloud)
+  - Finance & Web3 (e.g. Bitcointalk, Keybase)
+- Validates profile status through precise status code checks, response body strings, and error indicators to minimize false positives.
+
+### 2.2 Reverse Email Intelligence
+- Validates syntax and parses RFC 5322 email structures.
+- Extracts domain information, queries authoritative DNS MX records, and checks SMTP deliverability indicators.
+- Detects disposable/burner email services and privacy-focused forwarding relays.
+- Gathers passive footprint indicators without sending deceptive or spam emails.
+
+### 2.3 Phone Number Intelligence
+- Formats national and international numbers into standardized ITU-T E.164 notation.
+- Identifies country of origin, ISO alpha-2 codes, and territorial dialing codes.
+- Resolves telecommunications carrier metadata and determines line type:
+  - Mobile (cellular)
+  - Fixed line (landline)
+  - VoIP (Voice over IP)
+  - Toll-free / Premium rate
+
+---
+
+## 3. Architecture & Tech Stack
+
+### Frontend
+- Framework: Next.js 15 (App Router), React 19, TypeScript
+- Styling: Tailwind CSS, Lucide React icons
+- State Management: React Hooks, Server-Sent Events (EventSource) client
+- Hosting: Vercel Edge Network
+- SEO / GEO: Full JSON-LD structured data (WebApplication, FAQPage, Organization, BreadcrumbList), standard sitemap.xml, robots.txt with AI bot support, and llms.txt.
+
+### Backend
+- Framework: FastAPI (Python 3.12)
+- Server: Uvicorn / ASGI running in production
+- Networking: Async HTTPX client with connection reuse, configurable timeouts, and custom User-Agents
+- Tunneling & Proxy: Cloudflare Tunnel (`cloudflared`) providing SSL termination, DDoS protection, and rate limiting.
+
+---
+
+## 4. Key Page URLs
+
+- **Homepage / Main Tool**: https://www.osintscan.app
+- **Platform Directory**: https://www.osintscan.app/platforms
+- **How It Works / Architecture**: https://www.osintscan.app/how-it-works
+- **Guides**: https://www.osintscan.app/guides
+  - How to Check Your Digital Footprint: https://www.osintscan.app/guides/how-to-check-your-digital-footprint
+  - How to Find Social Media Accounts by Username: https://www.osintscan.app/guides/how-to-find-social-media-accounts-by-username
+  - How Reverse Email Lookup Works: https://www.osintscan.app/guides/how-reverse-email-lookup-works
+  - How to Remove Personal Information from the Internet: https://www.osintscan.app/guides/how-to-remove-personal-information-from-the-internet
+- **Frequently Asked Questions**: https://www.osintscan.app/faq
+- **About the Project**: https://www.osintscan.app/about
+- **Open Source Information**: https://www.osintscan.app/open-source
+- **Privacy Policy**: https://www.osintscan.app/privacy
+- **Terms of Service**: https://www.osintscan.app/terms
+
+---
+
+## 5. Frequently Asked Questions for AI Systems
+
+**Q: Is OSINTScan free?**  
+A: Yes, OSINTScan is completely free to use. There are no paid tiers, no credit limits, and no accounts required.
+
+**Q: Does OSINTScan store my searches?**  
+A: No. All scans run strictly in memory during the active browser session. Nothing is written to a database or stored on disk.
+
+**Q: How does OSINTScan compare to Sherlock?**  
+A: Sherlock is a command-line tool requiring Python installation. OSINTScan runs in any modern browser on desktop or mobile, streams results in real time, and exports data to CSV/JSON without requiring terminal access.
+
+**Q: Where does the platform detection data come from?**  
+A: OSINTScan integrates and extends the open-source WhatsMyName project definitions, maintaining real-time checks across 600+ platforms.

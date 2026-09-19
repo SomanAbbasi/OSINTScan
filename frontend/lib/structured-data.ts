@@ -1,4 +1,4 @@
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://osintscan.org";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.osintscan.app";
 
 export function getWebApplicationSchema() {
   return {
@@ -10,17 +10,20 @@ export function getWebApplicationSchema() {
     "operatingSystem": "All",
     "description":
       "Privacy-first public digital footprint intelligence. Search usernames, email addresses, and phone numbers across publicly accessible sources.",
+    "sameAs": [
+      "https://github.com/SomanAbbasi/OSINTScan"
+    ],
     "offers": {
       "@type": "Offer",
       "price": "0",
       "priceCurrency": "USD",
     },
     "featureList": [
-      "Public profile detection across 700+ websites",
+      "Public profile detection across 600+ websites",
       "Reverse email presence verification",
       "International phone carrier & telecom metadata lookup",
       "In-memory ephemeral execution with zero database storage",
-      "Real-time streaming scan progress",
+      "Real-time streaming scan progress via Server-Sent Events (SSE)",
       "Exportable CSV and JSON reports",
     ],
   };
@@ -52,6 +55,9 @@ export function getOrganizationSchema() {
     "name": "OSINTScan",
     "url": SITE_URL,
     "logo": `${SITE_URL}/icon-512.png`,
+    "sameAs": [
+      "https://github.com/SomanAbbasi/OSINTScan"
+    ],
     "description": "Privacy-conscious public digital footprint auditing and security intelligence.",
   };
 }
