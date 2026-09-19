@@ -80,10 +80,10 @@ export function Header() {
           {/* Primary CTA Button */}
           <Link
             href={pathname === "/" ? "#scanner" : "/#scanner"}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+            className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 !text-white hover:!text-white text-xs font-semibold shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 group"
           >
-            <Search className="w-3 h-3 stroke-[2.5]" />
-            <span>Scan</span>
+            <Search className="w-3 h-3 stroke-[2.5] !text-white group-hover:!text-white" />
+            <span className="!text-white group-hover:!text-white">Scan</span>
           </Link>
 
           {/* Mobile Menu Button */}
@@ -128,10 +128,10 @@ export function Header() {
             <Link
               href="/#scanner"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-slate-900 text-white text-sm font-semibold shadow-xs"
+              className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 !text-white hover:!text-white text-sm font-semibold shadow-xs group"
             >
-              <Search className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Start a Scan</span>
+              <Search className="w-3.5 h-3.5 stroke-[2.5] !text-white group-hover:!text-white" />
+              <span className="!text-white group-hover:!text-white">Start a Scan</span>
             </Link>
           </div>
         </div>

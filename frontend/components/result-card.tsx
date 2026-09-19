@@ -59,26 +59,26 @@ export function ResultCard({ result }: { result: PlatformResult }) {
     if (isFound) {
       if (meta.crossValidation || result.confidence === "high") {
         return (
-          <span className="text-[11px] px-2 py-0.5 rounded-md font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+          <span className="text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-md font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 shrink-0">
             Public profile found
           </span>
         );
       }
       return (
-        <span className="text-[11px] px-2 py-0.5 rounded-md font-medium bg-slate-100 text-slate-800 border border-slate-200">
+        <span className="text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-md font-medium bg-slate-100 text-slate-800 border border-slate-200 shrink-0">
           Possible match
         </span>
       );
     }
     if (result.status === "NOT_FOUND") {
       return (
-        <span className="text-[11px] px-2 py-0.5 rounded-md font-medium bg-slate-50 text-slate-500 border border-slate-200">
+        <span className="text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-md font-medium bg-slate-50 text-slate-500 border border-slate-200 shrink-0">
           No profile found
         </span>
       );
     }
     return (
-      <span className="text-[11px] px-2 py-0.5 rounded-md font-medium bg-amber-50 text-amber-800 border border-amber-200">
+      <span className="text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-md font-medium bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
         Unable to verify
       </span>
     );
@@ -86,20 +86,20 @@ export function ResultCard({ result }: { result: PlatformResult }) {
 
   return (
     <div
-      className={`p-5 rounded-xl border bg-white transition-all duration-150 ${
+      className={`p-3.5 sm:p-5 rounded-xl border bg-white transition-all duration-150 ${
         isFound
           ? "border-slate-200/90 shadow-2xs hover:border-slate-300"
           : "border-slate-200/60 opacity-70"
       }`}
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-2.5 sm:gap-4">
         {/* Left: Platform Icon & Info */}
-        <div className="flex items-start gap-3.5 min-w-0 flex-1">
+        <div className="flex items-start gap-2.5 sm:gap-3.5 min-w-0 flex-1">
           {meta.avatarUrl ? (
             <img
               src={meta.avatarUrl}
               alt={result.displayName}
-              className="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover border border-slate-200 shrink-0"
               onError={(e) => {
                 try {
                   e.currentTarget.style.display = "none";
@@ -110,15 +110,15 @@ export function ResultCard({ result }: { result: PlatformResult }) {
             <PlatformIcon category={result.category} name={result.displayName} />
           )}
 
-          <div className="space-y-1 min-w-0 flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-semibold text-slate-950 text-base leading-snug break-words">
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <h3 className="font-semibold text-slate-950 text-sm sm:text-base leading-snug break-words">
                 {result.displayName}
               </h3>
               {getStatusBadge()}
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-slate-500 flex-wrap">
+            <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 flex-wrap">
               <span>Source: <strong className="font-mono text-slate-700">{getSourceDomain()}</strong></span>
               <span>·</span>
               <span className="capitalize">{result.category}</span>
@@ -127,7 +127,7 @@ export function ResultCard({ result }: { result: PlatformResult }) {
         </div>
 
         {/* Right: Response time */}
-        <div className="text-[11px] font-mono text-slate-400 shrink-0">
+        <div className="text-[10px] sm:text-[11px] font-mono text-slate-400 shrink-0">
           {result.durationMs}ms
         </div>
       </div>
@@ -228,16 +228,16 @@ export function ResultCard({ result }: { result: PlatformResult }) {
 
       {/* Action Row for Found Profile */}
       {result.profileUrl && isFound && (
-        <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-          <div className="truncate flex-1 min-w-[120px] max-w-full text-xs font-mono text-slate-400">
+        <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+          <div className="truncate flex-1 min-w-0 text-[11px] sm:text-xs font-mono text-slate-400">
             {result.profileUrl}
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
               type="button"
               onClick={handleCopy}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs transition-colors shrink-0"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50 text-[11px] sm:text-xs transition-colors shrink-0"
               aria-label="Copy profile link"
             >
               {copied ? (
@@ -257,17 +257,17 @@ export function ResultCard({ result }: { result: PlatformResult }) {
               href={result.profileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1 rounded-md bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 text-white hover:text-white text-[11px] sm:text-xs font-medium transition-colors shadow-2xs group"
             >
-              <span>Open</span>
-              <ExternalLink className="w-3 h-3" />
+              <span className="text-white group-hover:text-white">Open</span>
+              <ExternalLink className="w-3 h-3 text-white group-hover:text-white" />
             </a>
           </div>
         </div>
       )}
 
       {/* Subtle "Detection details" expandable panel (Section 13) */}
-      <div className="mt-3 pt-2 text-[11px] text-slate-400">
+      <div className="mt-1.5 pt-1 text-[10px] sm:text-[11px] text-slate-400">
         <button
           type="button"
           onClick={() => setShowDetails(!showDetails)}

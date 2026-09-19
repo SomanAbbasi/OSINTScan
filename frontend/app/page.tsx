@@ -288,10 +288,10 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
             <Link
               href="/platforms"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors shadow-2xs"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 !text-white hover:!text-white text-xs font-semibold transition-colors shadow-2xs group"
             >
-              <span>View all platforms</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span className="!text-white group-hover:!text-white">View all platforms</span>
+              <ArrowRight className="w-3.5 h-3.5 !text-white group-hover:!text-white" />
             </Link>
           </div>
         </div>

@@ -211,16 +211,16 @@ export function ScanWorkspace({
 
           {/* Active View Notice */}
           {statusFilter === "matches" && (
-            <div className="flex items-center justify-between text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-[11px] sm:text-xs px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800">
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                 <span>
-                  Showing <strong>Positive Matches ({filterCounts.matches})</strong> across all active engines.
+                  Showing <strong>Positive Matches ({filterCounts.matches})</strong>
                 </span>
               </div>
               <button
                 onClick={() => handleStatusChange("all")}
-                className="underline hover:text-black font-semibold flex items-center gap-1"
+                className="underline hover:text-black font-semibold flex items-center gap-1 text-[11px] sm:text-xs self-start sm:self-auto"
               >
                 <span>View all {deduplicatedResults.length} tested endpoints</span>
                 <ArrowRight className="w-3 h-3" />
@@ -252,10 +252,10 @@ export function ScanWorkspace({
               />
             )
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* Contained Results Deck */}
               {viewMode === "cards" ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-4">
                   {paginatedResults.map((r) => (
                     <ResultCard key={r.platformId} result={r} />
                   ))}

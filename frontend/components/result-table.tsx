@@ -134,10 +134,10 @@ export function ResultTable({ results }: { results: PlatformResult[] }) {
                           href={r.profileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium transition-colors shadow-2xs"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 !text-white hover:!text-white text-xs font-medium transition-colors shadow-2xs group"
                         >
-                          <span>Open</span>
-                          <ExternalLink className="w-3 h-3" />
+                          <span className="!text-white group-hover:!text-white">Open</span>
+                          <ExternalLink className="w-3 h-3 !text-white group-hover:!text-white" />
                         </a>
                       </div>
                     ) : (

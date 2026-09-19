@@ -41,10 +41,10 @@ export function ErrorState({
           <button
             type="button"
             onClick={onRetry}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-medium hover:bg-slate-800 transition-colors shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 !text-white hover:!text-white text-xs font-medium transition-colors shadow-2xs group"
           >
-            <RefreshCw className="w-3 h-3" />
-            <span>Retry scan</span>
+            <RefreshCw className="w-3 h-3 !text-white group-hover:!text-white" />
+            <span className="!text-white group-hover:!text-white">Retry scan</span>
           </button>
         </div>
       )}

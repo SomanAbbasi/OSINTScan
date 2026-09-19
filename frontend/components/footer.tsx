@@ -7,13 +7,13 @@ export function Footer() {
   return (
     <footer className="border-t border-slate-200/80 bg-white text-slate-600 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8 mb-8 sm:mb-12">
           {/* Brand & Philosophy */}
-          <div className="space-y-3">
+          <div className="col-span-2 md:col-span-1 space-y-3 pb-2 md:pb-0 border-b md:border-b-0 border-slate-100">
             <Link href="/" className="inline-block hover:opacity-90 transition-opacity">
               <OSINTScanLogo />
             </Link>
-            <p className="text-slate-500 text-xs leading-relaxed max-w-xs">
+            <p className="text-slate-500 text-xs leading-relaxed max-w-sm">
               Public digital footprint intelligence. Discover publicly accessible profiles and exposure signals across the web with privacy-first scanning.
             </p>
             <div className="flex items-center gap-1.5 text-[11px] text-slate-400 pt-1">
@@ -23,11 +23,11 @@ export function Footer() {
           </div>
 
           {/* EXPLORE */}
-          <div className="space-y-3">
+          <div className="col-span-1 space-y-2.5 sm:space-y-3">
             <h4 className="font-semibold text-slate-900 text-xs uppercase tracking-wider">
               Explore
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1.5 sm:space-y-2">
               <li>
                 <Link href="/username-search" className="hover:text-slate-950 transition-colors">
                   Username Search
@@ -67,11 +67,11 @@ export function Footer() {
           </div>
 
           {/* RESOURCES */}
-          <div className="space-y-3">
+          <div className="col-span-1 space-y-2.5 sm:space-y-3">
             <h4 className="font-semibold text-slate-900 text-xs uppercase tracking-wider">
               Resources
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1.5 sm:space-y-2">
               <li>
                 <Link href="/how-it-works" className="hover:text-slate-950 transition-colors">
                   How It Works
@@ -111,11 +111,11 @@ export function Footer() {
           </div>
 
           {/* TRANSPARENCY */}
-          <div className="space-y-3">
+          <div className="col-span-2 md:col-span-1 space-y-2.5 sm:space-y-3 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
             <h4 className="font-semibold text-slate-900 text-xs uppercase tracking-wider">
               Transparency
             </h4>
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-2 md:grid-cols-1 gap-1.5 sm:gap-2">
               <li>
                 <Link href="/about#public-data" className="hover:text-slate-950 transition-colors">
                   Public Data Only

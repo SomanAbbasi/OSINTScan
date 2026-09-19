@@ -32,10 +32,10 @@ export default function NotFound() {
         </Link>
         <Link
           href="/#scanner"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-2xs"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 !text-white hover:!text-white text-xs font-semibold transition-colors shadow-2xs group"
         >
-          <Search className="w-3.5 h-3.5" />
-          <span>Start a Scan</span>
+          <Search className="w-3.5 h-3.5 !text-white group-hover:!text-white" />
+          <span className="!text-white group-hover:!text-white">Start a Scan</span>
         </Link>
       </div>
 
