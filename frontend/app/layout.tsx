@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
@@ -99,6 +100,21 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${inter.className} bg-[#FAFAFB] text-slate-900 flex flex-col min-h-screen antialiased selection:bg-indigo-500/10 selection:text-indigo-900`}
       >
+        {/* Google tag (gtag.js) */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-MRTCYY6DVF"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-MRTCYY6DVF');
+          `}
+        </Script>
+
         <ScanProvider>
           <Header />
           <div className="flex-1 no-print">{children}</div>
