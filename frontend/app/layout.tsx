@@ -8,19 +8,29 @@ import { getWebApplicationSchema } from "@/lib/structured-data";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://osintscan.org";
+
 export const metadata: Metadata = {
-  title: "OSINTScan — Public Digital Footprint Search",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "OSINTScan — Public Digital Footprint Search",
+    template: "%s | OSINTScan",
+  },
   description:
     "Search usernames, emails, and phone numbers across publicly accessible sources with OSINTScan, a privacy-conscious digital footprint auditing tool.",
   keywords: [
     "osintscan",
     "digital footprint search",
     "public username search",
+    "reverse email lookup",
+    "phone number osint",
     "privacy audit tool",
     "osint tool",
     "account discovery",
   ],
-  authors: [{ name: "OSINTScan" }],
+  authors: [{ name: "OSINTScan Team" }],
+  creator: "OSINTScan",
+  publisher: "OSINTScan",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -37,9 +47,27 @@ export const metadata: Metadata = {
   openGraph: {
     title: "OSINTScan — Public Digital Footprint Search",
     description: "Search usernames, emails, and phone numbers across 700+ publicly accessible platforms with privacy-first in-memory auditing.",
-    url: "https://osintscan.org",
+    url: SITE_URL,
     siteName: "OSINTScan",
     type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/logo-full.png",
+        width: 1200,
+        height: 630,
+        alt: "OSINTScan — Digital Footprint Intelligence",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OSINTScan — Public Digital Footprint Search",
+    description: "Privacy-conscious public digital footprint intelligence and handle audit across 700+ platforms.",
+    images: ["/logo-full.png"],
+  },
+  alternates: {
+    canonical: SITE_URL,
   },
 };
 
