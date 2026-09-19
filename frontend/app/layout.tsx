@@ -8,7 +8,7 @@ import { getWebApplicationSchema } from "@/lib/structured-data";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://osintscan.org";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.osintscan.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -49,7 +49,6 @@ export const metadata: Metadata = {
     description: "Search usernames, emails, and phone numbers across 700+ publicly accessible platforms with privacy-first in-memory auditing.",
     url: SITE_URL,
     siteName: "OSINTScan",
-    type: "website",
     locale: "en_US",
     images: [
       {
@@ -69,6 +68,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+  verification: {
+    google: "BFtPanIXisSNmF0wW1-fwbPoYjsLWCfvTt4VP_HGmtw",
+  },
 };
 
 export default function RootLayout({
@@ -81,6 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="google-site-verification" content="BFtPanIXisSNmF0wW1-fwbPoYjsLWCfvTt4VP_HGmtw" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
