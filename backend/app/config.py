@@ -76,6 +76,8 @@ class Settings(BaseSettings):
         "https://osint-scan-frontend.vercel.app",
         "https://osintscan.org",
         "https://www.osintscan.org",
+        "https://osintscan.app",
+        "https://www.osintscan.app",
     ]
 
     @field_validator("CORS_ORIGINS", mode="before")
@@ -89,6 +91,8 @@ class Settings(BaseSettings):
             "https://osint-scan-frontend.vercel.app",
             "https://osintscan.org",
             "https://www.osintscan.org",
+            "https://osintscan.app",
+            "https://www.osintscan.app",
         ]
         origins: List[str] = []
         if isinstance(v, str):
