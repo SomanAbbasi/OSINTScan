@@ -51,21 +51,16 @@ class Settings(BaseSettings):
     GHUNT_MASTER_TOKEN: Optional[str] = None
     GHUNT_CREDS: Optional[str] = None
     
-    # Admin Security
-    ADMIN_API_KEY: str = "hs_admin_secret_key_change_in_production"
+    # Admin Security (Loaded exclusively from environment)
+    ADMIN_API_KEY: Optional[str] = None
 
     @field_validator("ADMIN_API_KEY", mode="before")
     @classmethod
-    def validate_admin_api_key(cls, v: Any) -> str:
-        is_production = bool(
-            os.getenv("VERCEL")
-            or os.getenv("ENVIRONMENT", "").lower() == "production"
-        )
+    def validate_admin_api_key(cls, v: Any) -> Optional[str]:
         val = str(v).strip() if v else ""
-        if is_production and (not val or val == "hs_admin_secret_key_change_in_production"):
-            # Never permit the public default key in production; auto-generate a secure random token
-            return secrets.token_urlsafe(32)
-        return val or "hs_admin_secret_key_change_in_production"
+        if not val or val == "hs_admin_secret_key_change_in_production":
+            return None
+        return val
     
     # CORS Origins
     CORS_ORIGINS: Union[List[str], str] = [

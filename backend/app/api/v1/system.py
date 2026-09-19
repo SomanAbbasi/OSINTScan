@@ -34,7 +34,7 @@ async def get_data_version():
 
 @router.get("/admin/health-metrics")
 async def get_admin_metrics(x_admin_key: str = Header(..., alias="X-Admin-Key")):
-    if x_admin_key != settings.ADMIN_API_KEY:
+    if not settings.ADMIN_API_KEY or x_admin_key != settings.ADMIN_API_KEY:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid admin authentication key.",
