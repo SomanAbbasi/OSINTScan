@@ -18,7 +18,8 @@
     "username_claimed": "blue"
   },
   "7Cups": {
-    "errorType": "status_code",
+    "errorMsg": "Oops! The content you're attempting to access could not be found.",
+    "errorType": "message",
     "url": "https://www.7cups.com/@{}",
     "urlMain": "https://www.7cups.com/",
     "username_claimed": "blue"

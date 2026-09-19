@@ -18,6 +18,22 @@ BLOCKING_PATTERNS = [
     "perimeterxidentifiers",
 ]
 
+NOT_FOUND_TITLES = [
+    "not found",
+    "404",
+    "page not found",
+    "user not found",
+    "profile not found",
+    "error 404",
+    "oops!",
+    "does not exist",
+    "doesn't exist",
+    "cannot be found",
+    "could not be found",
+    "page missing",
+    "unregistered",
+]
+
 UNIVERSAL_NOT_FOUND_PATTERNS = [
     "user not found",
     "page not found",
@@ -27,21 +43,49 @@ UNIVERSAL_NOT_FOUND_PATTERNS = [
     "this user doesn't exist",
     "user does not exist",
     "account does not exist",
+    "profile does not exist",
     "channel does not exist",
     "this page isn't available",
     "this content isn't available right now",
     "the specified profile could not be found",
+    "could not be found",
+    "cannot be found",
+    "content could not be found",
+    "page could not be found",
+    "user could not be found",
+    "profile could not be found",
+    "the content you're attempting to access could not be found",
+    "oops! the content you're attempting to access could not be found",
     "we couldn't find this page",
+    "we couldn't find that page",
     "we can't find that user",
+    "we can't find that page",
     "sorry, this page isn't available",
+    "sorry, we couldn't find",
     "sorry, nobody on reddit goes by that name",
     "the requested user was not found",
+    "the requested profile was not found",
+    "the requested member could not be found",
+    "the page you requested cannot be found",
+    "the page you requested could not be found",
     "404 - page not found",
     "404 not found",
+    "error 404",
     "account has been suspended",
     "account suspended",
     "nobody with that handle",
     "the member you requested does not exist",
+    "no user found",
+    "no profile found",
+    "no account found",
+    "user is not registered",
+    "user not registered",
+    "profile is unavailable",
+    "profile unavailable",
+    "user is unavailable",
+    "user unavailable",
+    "this user is not available",
+    "this profile is not available",
 ]
 
 
@@ -76,6 +120,14 @@ def classify_response(
             PlatformStatus.BLOCKED,
             ConfidenceLevel.MANUAL_REVIEW,
             f"HTTP {status_code} received. Platform enforces access restrictions."
+        )
+
+    # WAF challenge HTTP 202 (AWS WAF, CloudFront challenge)
+    if status_code == 202:
+        return (
+            PlatformStatus.BLOCKED,
+            ConfidenceLevel.MANUAL_REVIEW,
+            "HTTP 202 received; platform returned security or WAF challenge."
         )
 
     for title in BLOCKING_TITLES:
@@ -120,20 +172,41 @@ def classify_response(
             f"HTTP {status_code} received; standard account not found indicator."
         )
 
-    # 4. Fourth priority: Universal soft-404 check (SPAs returning HTTP 200 with not-found body text)
-    has_e_string = bool(e_string and e_string.strip())
-    if not has_e_string and status_code < 400:
-        for unf_pattern in UNIVERSAL_NOT_FOUND_PATTERNS:
-            if unf_pattern in body_lower:
+    # 4. Fourth priority: Title tag & universal soft-404 check
+    # Check title tag if present
+    title_match = re.search(r"<title>(.*?)</title>", body_lower, re.IGNORECASE)
+    if title_match:
+        page_title = title_match.group(1).strip()
+        for nf_title in NOT_FOUND_TITLES:
+            if nf_title in page_title:
                 return (
                     PlatformStatus.NOT_FOUND,
                     ConfidenceLevel.HIGH,
-                    f"Response contained soft-404 signature: '{unf_pattern}'."
+                    f"Page title matched not-found indicator: '{page_title}'."
                 )
 
+    # Check soft-404 patterns in body
+    has_e_string = bool(e_string and e_string.strip())
+    for unf_pattern in UNIVERSAL_NOT_FOUND_PATTERNS:
+        if unf_pattern in body_lower:
+            return (
+                PlatformStatus.NOT_FOUND,
+                ConfidenceLevel.HIGH,
+                f"Response contained soft-404 signature: '{unf_pattern}'."
+            )
+
     # 5. Fifth priority: Positive profile match
-    # Any HTTP 4xx or 5xx can NEVER be a positive profile match
-    if status_code < 400:
+    # Any HTTP 4xx, 5xx, or 202 can NEVER be a positive profile match
+    if 200 <= status_code < 400 and status_code != 202:
+        # For status-code-only checks (no expected fingerprint string), an empty/trivial response (< 15 chars) is not a profile
+        is_json = body_text.strip().startswith("{") or body_text.strip().startswith("[")
+        if not has_e_string and not is_json and len(body_text.strip()) < 15:
+            return (
+                PlatformStatus.NOT_FOUND,
+                ConfidenceLevel.HIGH,
+                f"HTTP {status_code} returned empty/stub response ({len(body_text.strip())} bytes).",
+            )
+
         status_matches = (status_code == e_code)
         string_matches = (e_string in body_text) if has_e_string else True
 

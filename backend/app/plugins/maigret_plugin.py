@@ -123,8 +123,9 @@ class MaigretPlugin(BaseOSINTPlugin):
                     body_text = resp.text
                     status_code = resp.status_code
 
-                    # WAF detection
-                    if any(w in body_text for w in WAF_PATTERNS) or status_code == 429:
+                    # WAF detection & challenge headers
+                    waf_header = resp.headers.get("x-amzn-waf-action") or resp.headers.get("cf-mitigated")
+                    if waf_header or status_code in (202, 429) or any(w in body_text for w in WAF_PATTERNS):
                         res = OSINTModuleResult(
                             sourceName=self.name,
                             category="username",
@@ -135,7 +136,7 @@ class MaigretPlugin(BaseOSINTPlugin):
                             metadata={
                                 "site": site_name,
                                 "urlMain": site_data.get("urlMain"),
-                                "reason": "Cloudflare / Anti-Bot protection triggered.",
+                                "reason": f"WAF challenge detected (status {status_code}, header {waf_header}).",
                                 "durationMs": duration_ms,
                             },
                         )
@@ -202,8 +203,54 @@ class MaigretPlugin(BaseOSINTPlugin):
                             await result_queue.put(res)
                             return
 
-                    # 4. Soft-404 verification
+                    # 4. Title tag check & soft-404 verification
                     body_lower = body_text.lower()
+                    title_match = re.search(r"<title>(.*?)</title>", body_lower)
+                    if title_match:
+                        page_title = title_match.group(1).strip()
+                        if any(term in page_title for term in [
+                            "not found", "page not found", "404", "error 404",
+                            "user not found", "profile not found", "oops!",
+                            "does not exist", "doesn't exist", "cannot be found",
+                            "could not be found", "unregistered"
+                        ]):
+                            res = OSINTModuleResult(
+                                sourceName=self.name,
+                                category="username",
+                                target=target,
+                                status="not_found",
+                                platformName=site_name,
+                                profileUrl=None,
+                                metadata={
+                                    "site": site_name,
+                                    "urlMain": site_data.get("urlMain"),
+                                    "reason": f"Title matched not-found indicator: '{page_title}'",
+                                    "durationMs": duration_ms,
+                                },
+                            )
+                            await result_queue.put(res)
+                            return
+
+                    # Reject empty or stub responses (<15 bytes) that are not JSON
+                    is_json = body_text.strip().startswith("{") or body_text.strip().startswith("[")
+                    if not is_json and len(body_text.strip()) < 15:
+                        res = OSINTModuleResult(
+                            sourceName=self.name,
+                            category="username",
+                            target=target,
+                            status="not_found",
+                            platformName=site_name,
+                            profileUrl=None,
+                            metadata={
+                                "site": site_name,
+                                "urlMain": site_data.get("urlMain"),
+                                "reason": f"Empty or stub response ({len(body_text.strip())} bytes).",
+                                "durationMs": duration_ms,
+                            },
+                        )
+                        await result_queue.put(res)
+                        return
+
                     if any(p in body_lower for p in UNIVERSAL_NOT_FOUND_PATTERNS):
                         res = OSINTModuleResult(
                             sourceName=self.name,
@@ -224,7 +271,7 @@ class MaigretPlugin(BaseOSINTPlugin):
 
                     is_found = False
 
-                    if 200 <= status_code < 300:
+                    if 200 <= status_code < 300 and status_code != 202:
                         if check_type == "message":
                             is_absence = any(s in body_text for s in absence_strs) if absence_strs else False
                             is_presence = any(s in body_text for s in presence_strs) if presence_strs else True

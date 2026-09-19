@@ -79,7 +79,7 @@ export function downloadCSV(summary: ScanSummary) {
   const target = summary.target || summary.username;
   const lines = [
     "# ==================================================================",
-    "# HandleScope — Multi-Engine OSINT Intelligence Audit Report",
+    "# OSINTScan — Digital Footprint Intelligence Report",
     "# ==================================================================",
     `# Target: ${target}`,
     `# Input Type: ${summary.inputType || "username"}`,

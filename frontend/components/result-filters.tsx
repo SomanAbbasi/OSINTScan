@@ -40,46 +40,21 @@ export function ResultFilters({
   categories,
   counts,
 }: ResultFiltersProps) {
-  // Put Matches (Found) FIRST as the default focus
-  const statusTabs = [
-    { id: "matches", label: "Profiles Found", count: counts.matches },
-    { id: "high_confidence", label: "Likely Matches", count: counts.highConfidence },
-    { id: "manual_review", label: "Manual Review", count: counts.manualReview },
-    { id: "not_found", label: "Not Found", count: counts.notFound },
-    { id: "blocked", label: "Limited", count: counts.blocked },
-    { id: "errors", label: "Errors", count: counts.errors },
-    { id: "all", label: "All Sources", count: counts.all },
-  ];
-
   return (
     <div className="space-y-3 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
-      {/* Status Pill Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
-        {statusTabs.map((tab) => {
-          const isActive = statusFilter === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => onStatusChange(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all ${
-                isActive
-                  ? "bg-slate-900 text-white shadow-2xs"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-              }`}
-            >
-              <span>{tab.label}</span>
-              <span
-                className={`px-1.5 py-0.2 rounded-md text-[10px] font-mono ${
-                  isActive
-                    ? "bg-white/20 text-white"
-                    : "bg-slate-200 text-slate-700"
-                }`}
-              >
-                {tab.count}
-              </span>
-            </button>
-          );
-        })}
+      {/* Found Metrics Highlight */}
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-1 text-xs">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200 shadow-2xs">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>{counts.matches} Profiles Found</span>
+          </span>
+          {counts.highConfidence > 0 && (
+            <span className="text-[11px] text-slate-500 font-medium hidden sm:inline">
+              ({counts.highConfidence} verified high-confidence)
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Second row: Search, Category, Sort, and View Toggle */}

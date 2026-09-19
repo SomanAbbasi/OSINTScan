@@ -121,23 +121,15 @@ export function ScanWorkspace({
     return Array.from(new Set(deduplicatedResults.map((r) => r.category))).sort();
   }, [deduplicatedResults]);
 
-  // Filter by status, category, search query, and engine
+  // Filter by category and search query, strictly displaying found profiles
   const filtered = useMemo(() => {
-    let list = filterResults(deduplicatedResults, {
-      statusFilter,
+    const confirmedMatches = deduplicatedResults.filter((r) => r.status === "FOUND");
+    return filterResults(confirmedMatches, {
+      statusFilter: "matches",
       categoryFilter,
       searchQuery,
     });
-
-    if (engineFilter && engineFilter !== "all") {
-      list = list.filter((r) => {
-        const engines = (r.metadata?.engines as string[]) || [r.sourceEngine || "WhatsMyName"];
-        return engines.some((e) => e.toLowerCase() === engineFilter.toLowerCase());
-      });
-    }
-
-    return list;
-  }, [deduplicatedResults, statusFilter, categoryFilter, searchQuery, engineFilter]);
+  }, [deduplicatedResults, categoryFilter, searchQuery]);
 
   const sortedResults = sortResults(filtered, sortBy);
 
@@ -192,62 +184,14 @@ export function ScanWorkspace({
               <h3 className="text-lg font-bold text-slate-900">
                 Audit Intelligence Results
               </h3>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-mono font-medium border border-slate-200">
-                {deduplicatedResults.length} unique platforms
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-mono font-semibold border border-emerald-200">
+                {foundMatches.length} profiles found
               </span>
             </div>
             <ExportMenu summary={summary} matches={foundMatches} />
           </div>
 
           <ResultSummary summary={summary} />
-
-          {/* Engine Filter Bar (If multiple engines returned results) */}
-          {availableEngines.length > 1 && (
-            <div className="flex items-center gap-2 flex-wrap text-xs pt-1">
-              <div className="flex items-center gap-1 text-slate-500 font-medium pr-1">
-                <Filter className="w-3.5 h-3.5" />
-                <span>Engine:</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setEngineFilter("all");
-                  setCurrentPage(1);
-                }}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                  engineFilter === "all"
-                    ? "bg-slate-900 text-white shadow-xs"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                All Engines ({deduplicatedResults.length})
-              </button>
-              {availableEngines.map((eng) => {
-                const count = deduplicatedResults.filter((r) => {
-                  const engines = (r.metadata?.engines as string[]) || [r.sourceEngine];
-                  return engines.some((e) => e.toLowerCase() === eng.toLowerCase());
-                }).length;
-                const isSelected = engineFilter.toLowerCase() === eng.toLowerCase();
-                return (
-                  <button
-                    key={eng}
-                    type="button"
-                    onClick={() => {
-                      setEngineFilter(eng);
-                      setCurrentPage(1);
-                    }}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                      isSelected
-                        ? "bg-slate-900 text-white shadow-xs"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
-                  >
-                    {eng} ({count})
-                  </button>
-                );
-              })}
-            </div>
-          )}
 
           {/* Filters Bar */}
           <ResultFilters

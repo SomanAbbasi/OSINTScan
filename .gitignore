@@ -54,3 +54,4 @@ Thumbs.db
 # WMN checker reports
 scripts/checker/*-wmncheck.md
 scripts/checker/*-wmncheck-partial.md
+.vercel
