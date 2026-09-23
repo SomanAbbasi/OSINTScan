@@ -17,6 +17,8 @@ HandleScope is a browser-based username footprint auditing tool. A user enters a
 
 ---
 
+<img width="1919" height="996" alt="Screenshot 2026-09-24 014044" src="https://github.com/user-attachments/assets/7df3b04d-21b3-40f0-9d9a-3a4b108e8fed" />
+
 ## 🌟 Key Features
 
 * **⚡ Real-Time Streaming (SSE):** High-concurrency async scanner in Python (FastAPI + `httpx`) streams results directly to the browser via Server-Sent Events.
