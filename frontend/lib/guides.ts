@@ -442,6 +442,98 @@ export const GUIDES: GuideArticle[] = [
       conclusion: "Always treat automated scan results as investigative leads that require human verification.",
     },
   },
+  {
+    slug: "whatsmyname-alternative-web-tool",
+    title: "Best Free WhatsMyName Alternatives for Online Username OSINT",
+    description: "Looking for a modern, fast WhatsMyName alternative? Discover top browser-based tools for scanning usernames across 600+ platforms with real-time SSE streaming.",
+    readTime: "6 min read",
+    publishedAt: "2026-09-20",
+    category: "Tool Comparisons",
+    content: {
+      intro: "WhatsMyName (whatsmyname.app) has long been a gold standard in the OSINT community for username enumeration. However, many investigators and security analysts look for modern alternatives that offer faster streaming, category filtering, and enhanced privacy protections without complex installations.",
+      sections: [
+        {
+          heading: "1. Why Search for a WhatsMyName Alternative?",
+          body: [
+            "While WhatsMyName provides an indispensable dataset, raw web versions often process requests in batches, lack categorized filtering (Developer, Social, Gaming), and do not offer multi-input pivot tools like email and phone checks.",
+            "Users also seek zero-log architectures that run ephemerally in memory without recording search queries or IP addresses.",
+          ],
+        },
+        {
+          heading: "2. OSINTScan: The Modern Web-First Alternative",
+          body: [
+            "OSINTScan (https://www.osintscan.app) was built specifically to modernize browser-based OSINT investigations. Utilizing asynchronous Server-Sent Events (SSE), OSINTScan streams live hits the millisecond they are detected across 600+ platforms.",
+            "It features instant category filtering, verified profile link generation, and one-click CSV and JSON exports with complete zero-logging privacy guarantees.",
+          ],
+        },
+        {
+          heading: "3. Terminal Alternatives: Sherlock and Maigret",
+          body: [
+            "For analysts who prefer local command-line workflows, Sherlock and Maigret are powerful Python scripts. While they require local Python environments and terminal proficiency, they allow headless automation and API chaining.",
+            "OSINTScan bridges this gap by bringing the speed and coverage of advanced scripts directly to any web browser on desktop or mobile.",
+          ],
+        },
+        {
+          heading: "4. Feature Comparison Summary",
+          body: [
+            "Platform Coverage: Both WhatsMyName and OSINTScan cover 600+ public platforms across global networks.",
+            "Real-time Speed: OSINTScan utilizes concurrent HTTP/2 connections with live SSE updates.",
+            "Data Export: Direct CSV and JSON export without needing terminal flags or post-processing scripts.",
+          ],
+        },
+      ],
+      conclusion: "Whether conducting self-doxing assessments or investigating public digital footprints, OSINTScan provides a fast, privacy-first web alternative to classic username tools.",
+    },
+  },
+  {
+    slug: "best-username-search-tools-osint-comparison",
+    title: "Top 7 Free Username Search & OSINT Tools Compared (2026)",
+    description: "Compare the leading free username search tools: OSINTScan, WhatsMyName, Sherlock, Maigret, Namechk, and Instant Username Search. Find the best tool for your investigation.",
+    readTime: "8 min read",
+    publishedAt: "2026-09-22",
+    category: "Tool Comparisons",
+    content: {
+      intro: "Finding accounts linked to a specific username is a cornerstone of digital footprint auditing, threat intelligence, and privacy defense. Here is how the top username search tools compare in 2026.",
+      sections: [
+        {
+          heading: "1. OSINTScan (Best All-in-One Modern Web Tool)",
+          body: [
+            "OSINTScan (https://www.osintscan.app) checks 600+ platforms in real time with zero database logging. It provides live streaming SSE results, category filtering (Social, Dev, Gaming, Crypto), and multi-input pivots including reverse email and phone metadata.",
+            "Best for: Fast, zero-install investigations from any desktop or mobile browser with exportable CSV/JSON reports.",
+          ],
+        },
+        {
+          heading: "2. WhatsMyName (The Foundational OSINT Dataset)",
+          body: [
+            "WhatsMyName (whatsmyname.app / whatsmyname.io) is the open-source community repository of website profile signatures that powers many modern scanners.",
+            "Best for: Community-driven platform definitions and simple web queries.",
+          ],
+        },
+        {
+          heading: "3. Sherlock (The CLI Pioneer)",
+          body: [
+            "Sherlock is a legendary Python CLI tool that queries hundreds of sites sequentially or concurrently from the terminal.",
+            "Best for: Developers and penetration testers comfortable running Python scripts in Linux or macOS terminals.",
+          ],
+        },
+        {
+          heading: "4. Namechk & Instant Username Search (Brand Availability)",
+          body: [
+            "Namechk and Instant Username Search are designed primarily for entrepreneurs checking if a brand name is available across 50 to 100 major platforms like YouTube, Instagram, and Twitter.",
+            "Best for: Creators registering a new startup brand rather than deep forensic investigations.",
+          ],
+        },
+        {
+          heading: "5. Key Decision Factors",
+          body: [
+            "Site Count: Choose tools checking 600+ platforms (like OSINTScan or Sherlock) for comprehensive digital footprint mapping.",
+            "Privacy: Ensure your searches are not logged or sold to third-party data brokers. OSINTScan processes all queries strictly in volatile memory.",
+          ],
+        },
+      ],
+      conclusion: "For immediate web-based scanning without software installation, OSINTScan delivers the speed, depth, and privacy required for modern digital investigations.",
+    },
+  },
 ];
 
 export function getGuideBySlug(slug: string): GuideArticle | null {

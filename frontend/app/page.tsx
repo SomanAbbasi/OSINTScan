@@ -27,7 +27,17 @@ const HOMEPAGE_FAQS = [
   {
     question: "What is OSINT and what does OSINTScan check?",
     answer:
-      "OSINT (Open Source Intelligence) refers to analyzing publicly available data. OSINTScan checks whether a public username, email address, or phone number exists across 700+ publicly queryable websites, developer registries, and open telecommunication registers.",
+      "OSINT (Open Source Intelligence) refers to analyzing publicly available data. OSINTScan (osintscan.app) checks whether a public username, email address, or phone number exists across 600+ publicly queryable websites, developer registries, and open telecommunication registers.",
+  },
+  {
+    question: "How does OSINTScan compare to tools like WhatsMyName or Sherlock?",
+    answer:
+      "Sherlock and Maigret are Python command-line tools requiring local terminal setups. WhatsMyName provides raw platform signatures. OSINTScan combines 600+ platform coverage into a modern web browser interface with real-time Server-Sent Events (SSE) streaming, category filtering (Social, Dev, Gaming, Crypto), reverse email/phone modules, and zero database logging.",
+  },
+  {
+    question: "Is OSINTScan completely free to search usernames across platforms?",
+    answer:
+      "Yes, OSINTScan is 100% free with no account registration, no search credits, and no paywalls. You can search any public handle across 600+ websites and export results to CSV or JSON immediately.",
   },
   {
     question: "Does OSINTScan access private accounts or passwords?",

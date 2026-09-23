@@ -5,11 +5,18 @@ export function getWebApplicationSchema() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "OSINTScan",
+    "alternateName": [
+      "OSINT Scan",
+      "osintscan",
+      "osintscan.app",
+      "OSINTScan App"
+    ],
     "url": SITE_URL,
     "applicationCategory": "SecurityApplication",
-    "operatingSystem": "All",
+    "operatingSystem": "Web Browser, iOS, Android, Windows, macOS, Linux",
     "description":
-      "Privacy-first public digital footprint intelligence. Search usernames, email addresses, and phone numbers across publicly accessible sources.",
+      "Privacy-first public digital footprint intelligence and username search across 600+ platforms. Free, real-time, and zero database logging.",
+    "keywords": "osintscan, username search, free username search, whatsmyname alternative, sherlock online, check username across platforms",
     "sameAs": [
       "https://github.com/SomanAbbasi/OSINTScan"
     ],
@@ -34,9 +41,15 @@ export function getWebSiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "OSINTScan",
+    "alternateName": [
+      "OSINT Scan",
+      "osintscan",
+      "osintscan.app",
+      "OSINTScan App"
+    ],
     "url": SITE_URL,
     "description":
-      "Public digital footprint search for usernames, email addresses, and phone numbers.",
+      "Free public username search and digital footprint scanner across 600+ social media platforms and online communities.",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
@@ -53,6 +66,11 @@ export function getOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "OSINTScan",
+    "alternateName": [
+      "OSINT Scan",
+      "osintscan",
+      "osintscan.app"
+    ],
     "url": SITE_URL,
     "logo": `${SITE_URL}/icon-512.png`,
     "sameAs": [
