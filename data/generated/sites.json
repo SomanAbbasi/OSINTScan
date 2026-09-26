@@ -4,6 +4,76 @@
   "enabledCount": 715,
   "sites": [
     {
+      "id": "dockerhub",
+      "name": "Docker Hub",
+      "displayName": "Docker Hub",
+      "category": "coding",
+      "uriCheck": "https://hub.docker.com/v2/users/{account}/",
+      "uriPretty": "https://hub.docker.com/u/{account}",
+      "eCode": 200,
+      "eString": "\"id\":",
+      "mCode": 404,
+      "mString": "Object not found",
+      "headers": {},
+      "stripBadChar": "",
+      "protection": [],
+      "requiresManualVerification": false,
+      "enabled": true
+    },
+    {
+      "id": "devto-api",
+      "name": "DEV Community",
+      "displayName": "DEV Community",
+      "category": "coding",
+      "uriCheck": "https://dev.to/api/users/by_username?url={account}",
+      "uriPretty": "https://dev.to/{account}",
+      "eCode": 200,
+      "eString": "\"username\":",
+      "mCode": 404,
+      "mString": "\"status\":404",
+      "headers": {},
+      "stripBadChar": "",
+      "protection": [],
+      "requiresManualVerification": false,
+      "enabled": true
+    },
+    {
+      "id": "bluesky",
+      "name": "Bluesky",
+      "displayName": "Bluesky",
+      "category": "social",
+      "uriCheck": "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor={account}.bsky.social",
+      "uriPretty": "https://bsky.app/profile/{account}.bsky.social",
+      "eCode": 200,
+      "eString": "\"did\":",
+      "mCode": 400,
+      "mString": "Profile not found",
+      "headers": {},
+      "stripBadChar": "",
+      "protection": [],
+      "requiresManualVerification": false,
+      "enabled": true
+    },
+    {
+      "id": "x-twitter",
+      "name": "X (Twitter)",
+      "displayName": "X (Twitter)",
+      "category": "social",
+      "uriCheck": "https://api.vxtwitter.com/{account}",
+      "uriPretty": "https://x.com/{account}",
+      "eCode": 200,
+      "eString": "\"created_at\":",
+      "mCode": 404,
+      "mString": "User not found",
+      "headers": {
+        "User-Agent": "Discordbot/2.0"
+      },
+      "stripBadChar": "",
+      "protection": [],
+      "requiresManualVerification": false,
+      "enabled": true
+    },
+    {
       "id": "247ctf",
       "name": "247CTF",
       "displayName": "247CTF",
@@ -7889,14 +7959,16 @@
       "displayName": "Instagram",
       "slug": "instagram",
       "category": "social",
-      "uriCheck": "https://www.instagram.com/{account}/",
+      "uriCheck": "https://www.instagram.com/{account}/embed/",
       "uriPretty": "https://www.instagram.com/{account}/",
       "eCode": 200,
-      "eString": "Posts - See Instagram photos and videos from",
+      "eString": "\"contextJSON\":\"{\\\"context\\\":{",
       "mCode": 200,
-      "mString": "\"routePath\":null",
+      "mString": "\"contextJSON\":null",
       "postBody": null,
-      "headers": {},
+      "headers": {
+        "User-Agent": "python-httpx/0.27.0"
+      },
       "stripBadChar": null,
       "knownUsernames": [
         "jennaortega",
@@ -7929,7 +8001,7 @@
         "therock",
         "ramarim"
       ],
-      "enabled": true,
+      "enabled": false,
       "confidence": "medium",
       "protection": [
         "cloudflare"
@@ -13738,12 +13810,12 @@
       "displayName": "Reddit",
       "slug": "reddit",
       "category": "social",
-      "uriCheck": "https://www.reddit.com/user/{account}/about.json",
+      "uriCheck": "https://arctic-shift.photon-reddit.com/api/users/search?author={account}&limit=1",
       "uriPretty": "https://www.reddit.com/user/{account}",
       "eCode": 200,
-      "eString": "\"id\":",
-      "mCode": 404,
-      "mString": "\"error\":404",
+      "eString": "\"author\":\"",
+      "mCode": 200,
+      "mString": "\"data\":[]",
       "postBody": null,
       "headers": {},
       "stripBadChar": null,
@@ -15337,11 +15409,13 @@
       "uriCheck": "https://open.spotify.com/user/{account}",
       "uriPretty": "https://open.spotify.com/user/{account}",
       "eCode": 200,
-      "eString": "content=\"profile\"",
+      "eString": "on Spotify",
       "mCode": 404,
       "mString": "Page not found",
       "postBody": null,
-      "headers": {},
+      "headers": {
+        "User-Agent": "facebookexternalhit/1.1"
+      },
       "stripBadChar": null,
       "knownUsernames": [
         "kexp_official",
@@ -19230,8 +19304,8 @@
     },
     {
       "id": "youtube-user2",
-      "name": "YouTube User2",
-      "displayName": "YouTube User2",
+      "name": "YouTube",
+      "displayName": "YouTube",
       "slug": "youtube-user2",
       "category": "video",
       "uriCheck": "https://www.youtube.com/@{account}",
@@ -19558,5 +19632,6 @@
       "privacyNotes": "",
       "source": "upstream"
     }
-  ]
+  ],
+  "totalSites": 720
 }

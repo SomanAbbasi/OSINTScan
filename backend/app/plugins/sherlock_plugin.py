@@ -101,6 +101,7 @@ class SherlockPlugin(BaseOSINTPlugin):
             headers = {
                 "User-Agent": settings.USER_AGENT,
                 "Accept-Language": "en-US,en;q=0.9",
+                "Cookie": "SOCS=CAESHAgBEhJnd3NfMjAyMzA4MTAtMF9SQzIaAmVuIAEaBgiAo_CmBg; CONSENT=YES+cb.20210720-07-p0.en+FX+410",
             }
             if site_data.get("headers"):
                 headers.update(site_data["headers"])

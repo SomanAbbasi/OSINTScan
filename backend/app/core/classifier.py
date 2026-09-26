@@ -148,9 +148,10 @@ def classify_response(
 
     # 3. Third priority: Explicit missing account match (m_code or m_string)
     has_m_string = bool(m_string and m_string.strip())
-    m_string_present = (m_string in body_text) if has_m_string else False
+    m_string_lower = m_string.lower() if has_m_string else ""
+    m_string_present = (m_string in body_text or m_string_lower in body_lower) if has_m_string else False
 
-    if m_code and status_code == m_code and (not m_string or m_string in body_text):
+    if m_code and status_code == m_code and (not has_m_string or m_string_present):
         return (
             PlatformStatus.NOT_FOUND,
             ConfidenceLevel.HIGH,
@@ -185,15 +186,20 @@ def classify_response(
                     f"Page title matched not-found indicator: '{page_title}'."
                 )
 
-    # Check soft-404 patterns in body
     has_e_string = bool(e_string and e_string.strip())
-    for unf_pattern in UNIVERSAL_NOT_FOUND_PATTERNS:
-        if unf_pattern in body_lower:
-            return (
-                PlatformStatus.NOT_FOUND,
-                ConfidenceLevel.HIGH,
-                f"Response contained soft-404 signature: '{unf_pattern}'."
-            )
+    e_string_lower = e_string.lower() if has_e_string else ""
+    string_matches = (e_string in body_text or e_string_lower in body_lower) if has_e_string else True
+
+    # Check soft-404 patterns in body only when a specific positive e_string is not already matched
+    is_specific_e_string = has_e_string and len(e_string.strip()) >= 5 and e_string_lower not in ("<html", "<title>", "<!doctype")
+    if not (is_specific_e_string and string_matches and status_code == e_code):
+        for unf_pattern in UNIVERSAL_NOT_FOUND_PATTERNS:
+            if unf_pattern in body_lower:
+                return (
+                    PlatformStatus.NOT_FOUND,
+                    ConfidenceLevel.HIGH,
+                    f"Response contained soft-404 signature: '{unf_pattern}'."
+                )
 
     # 5. Fifth priority: Positive profile match
     # Any HTTP 4xx, 5xx, or 202 can NEVER be a positive profile match
@@ -208,7 +214,6 @@ def classify_response(
             )
 
         status_matches = (status_code == e_code)
-        string_matches = (e_string in body_text) if has_e_string else True
 
         if status_matches and string_matches and not m_string_present:
             confidence = ConfidenceLevel.HIGH if has_e_string else ConfidenceLevel.MEDIUM

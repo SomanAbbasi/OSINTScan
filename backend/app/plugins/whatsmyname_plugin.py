@@ -57,15 +57,20 @@ class WhatsMyNamePlugin(BaseOSINTPlugin):
         # Queue to stream results as they finish
         result_queue: asyncio.Queue[Optional[OSINTModuleResult]] = asyncio.Queue()
 
+        raw_target = (options.get("raw_target") if options else None) or target
+        candidates = [target.lower()]
+        if raw_target != target.lower():
+            candidates.append(raw_target)
+
         async def worker(client: httpx.AsyncClient, site: PlatformRule):
             start_time = time.monotonic()
             try:
-                url = build_safe_check_url(site.uriCheck, target, site.stripBadChar)
+                build_safe_check_url(site.uriCheck, candidates[0], site.stripBadChar)
             except Exception as e:
                 res = OSINTModuleResult(
                     sourceName=self.name,
                     category="username",
-                    target=target,
+                    target=raw_target,
                     status="error",
                     platformName=site.displayName,
                     profileUrl=None,
@@ -74,66 +79,80 @@ class WhatsMyNamePlugin(BaseOSINTPlugin):
                 await result_queue.put(res)
                 return
 
-            profile_url = site.uriPretty.replace("{account}", target) if site.uriPretty else url
-
             async with semaphore:
                 try:
-                    headers = {"User-Agent": settings.USER_AGENT}
+                    headers = {
+                        "User-Agent": settings.USER_AGENT,
+                        "Accept-Language": "en-US,en;q=0.9",
+                        "Cookie": "SOCS=CAESHAgBEhJnd3NfMjAyMzA4MTAtMF9SQzIaAmVuIAEaBgiAo_CmBg; CONSENT=YES+cb.20210720-07-p0.en+FX+410",
+                    }
                     if site.headers:
                         headers.update(site.headers)
 
-                    if site.postBody:
-                        body_str = json.dumps(site.postBody) if isinstance(site.postBody, (dict, list)) else str(site.postBody)
-                        post_payload = body_str.replace("{account}", target)
-                        resp = await client.post(
-                            url,
-                            content=post_payload,
-                            headers=headers,
-                            timeout=settings.SCAN_SITE_TIMEOUT_SECONDS,
-                            follow_redirects=True,
-                        )
-                    else:
-                        resp = await client.get(
-                            url,
-                            headers=headers,
-                            timeout=settings.SCAN_SITE_TIMEOUT_SECONDS,
-                            follow_redirects=True,
+                    final_res = None
+                    for candidate in candidates:
+                        url = build_safe_check_url(site.uriCheck, candidate, site.stripBadChar)
+                        profile_url = site.uriPretty.replace("{account}", candidate) if site.uriPretty else url
+
+                        if site.postBody:
+                            body_str = json.dumps(site.postBody) if isinstance(site.postBody, (dict, list)) else str(site.postBody)
+                            post_payload = body_str.replace("{account}", candidate)
+                            resp = await client.post(
+                                url,
+                                content=post_payload,
+                                headers=headers,
+                                timeout=settings.SCAN_SITE_TIMEOUT_SECONDS,
+                                follow_redirects=True,
+                            )
+                        else:
+                            resp = await client.get(
+                                url,
+                                headers=headers,
+                                timeout=settings.SCAN_SITE_TIMEOUT_SECONDS,
+                                follow_redirects=True,
+                            )
+
+                        duration_ms = int((time.monotonic() - start_time) * 1000)
+                        e_str = site.eString.replace("{account}", candidate) if site.eString else ""
+                        m_str = site.mString.replace("{account}", candidate) if site.mString else ""
+
+                        status_enum, confidence_enum, reason = classify_response(
+                            status_code=resp.status_code,
+                            body_text=resp.text,
+                            e_code=site.eCode,
+                            e_string=e_str,
+                            m_code=site.mCode,
+                            m_string=m_str,
+                            protections=site.protection,
                         )
 
-                    duration_ms = int((time.monotonic() - start_time) * 1000)
-                    status_enum, confidence_enum, reason = classify_response(
-                        status_code=resp.status_code,
-                        body_text=resp.text,
-                        e_code=site.eCode,
-                        e_string=site.eString,
-                        m_code=site.mCode,
-                        m_string=site.mString,
-                        protections=site.protection,
-                    )
-
-                    status_str = "found" if status_enum == PlatformStatus.FOUND else (
-                        "rate_limited" if status_enum in (PlatformStatus.RATE_LIMITED, PlatformStatus.BLOCKED) else (
-                            "not_found" if status_enum == PlatformStatus.NOT_FOUND else "error"
+                        status_str = "found" if status_enum == PlatformStatus.FOUND else (
+                            "rate_limited" if status_enum in (PlatformStatus.RATE_LIMITED, PlatformStatus.BLOCKED) else (
+                                "not_found" if status_enum == PlatformStatus.NOT_FOUND else "error"
+                            )
                         )
-                    )
 
-                    res = OSINTModuleResult(
-                        sourceName=self.name,
-                        category="username",
-                        target=target,
-                        status=status_str,
-                        platformName=site.displayName,
-                        profileUrl=profile_url if status_str == "found" else None,
-                        metadata={
-                            "platformId": site.id,
-                            "category": site.category,
-                            "confidence": confidence_enum.value,
-                            "detectionReason": reason,
-                            "durationMs": duration_ms,
-                            "requiresManualVerification": site.requiresManualVerification,
-                        },
-                    )
-                    await result_queue.put(res)
+                        final_res = OSINTModuleResult(
+                            sourceName=self.name,
+                            category="username",
+                            target=raw_target,
+                            status=status_str,
+                            platformName=site.displayName,
+                            profileUrl=profile_url if status_str == "found" else None,
+                            metadata={
+                                "platformId": site.id,
+                                "category": site.category,
+                                "confidence": confidence_enum.value,
+                                "detectionReason": reason,
+                                "durationMs": duration_ms,
+                                "requiresManualVerification": site.requiresManualVerification,
+                            },
+                        )
+                        if status_str == "found":
+                            break
+
+                    if final_res:
+                        await result_queue.put(final_res)
 
                 except httpx.TimeoutException:
                     res = OSINTModuleResult(
