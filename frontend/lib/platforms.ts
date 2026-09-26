@@ -40,6 +40,49 @@ export function getAllPlatforms(): PlatformDisplay[] {
   }
 }
 
+export const TIER1_PLATFORM_SLUGS = new Set([
+  "instagram",
+  "tiktok",
+  "youtube-channel",
+  "youtube-user2",
+  "x",
+  "reddit",
+  "spotify",
+  "github-user",
+  "gitlab",
+  "telegram",
+  "snapchat",
+  "pinterest",
+  "twitch",
+  "steam",
+  "roblox",
+  "medium",
+  "substack",
+  "linktree",
+  "patreon",
+  "soundcloud",
+  "vimeo",
+  "quora",
+  "behance",
+  "dribbble",
+  "deviantart",
+  "chesscom",
+  "huggingface",
+  "leetcode",
+  "kaggle",
+  "duolingo",
+]);
+
+export function isTier1Platform(slugOrId: string): boolean {
+  const normalized = slugOrId.toLowerCase().trim();
+  return TIER1_PLATFORM_SLUGS.has(normalized) || Boolean(PLATFORM_ALIASES[normalized]);
+}
+
+export function getTier1Platforms(): PlatformDisplay[] {
+  const all = getAllPlatforms();
+  return all.filter((p) => TIER1_PLATFORM_SLUGS.has(p.slug.toLowerCase()) || TIER1_PLATFORM_SLUGS.has(p.id.toLowerCase()));
+}
+
 export function getPlatformBySlug(slug: string): PlatformDisplay | null {
   const all = getAllPlatforms();
   let target = slug.toLowerCase();

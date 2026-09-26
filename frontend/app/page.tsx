@@ -56,6 +56,15 @@ const HOMEPAGE_FAQS = [
   },
 ];
 
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: "OSINTScan | Free Username Search Across 600+ Social Media Platforms",
+  description:
+    "OSINTScan (osintscan.app) is a free username search engine, reverse email OSINT lookup, and phone footprint scanner. Find all social media accounts by username across 600+ platforms including Instagram, YouTube, TikTok, X (Twitter), Reddit, Spotify, and GitHub.",
+  canonical: "/",
+});
+
 export default function HomePage() {
   const websiteSchema = getWebSiteSchema();
   const webAppSchema = getWebApplicationSchema();
@@ -85,18 +94,18 @@ export default function HomePage() {
       <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center space-y-6">
         {/* Eyebrow */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-[11px] font-semibold text-slate-700 tracking-wider uppercase">
-          <span>Free Username Search & OSINT Scanner</span>
+          <span>OSINTScan • Free Username Search & Digital Footprint Scanner</span>
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight max-w-3xl mx-auto leading-tight">
-          Free Username Search across{" "}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight max-w-4xl mx-auto leading-tight">
+          OSINTScan: Free Username Search across{" "}
           <span className="text-slate-950">600+ Social Media Platforms.</span>
         </h1>
 
         {/* Supporting Copy */}
         <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          Search any username, find linked public profiles, and audit digital footprints across 600+ sites with real-time, privacy-first OSINT scanning. 100% free with zero logs.
+          <strong>OSINTScan</strong> (<code className="text-xs font-mono bg-slate-100 px-1.5 py-0.5 rounded">osintscan.app</code>) lets you search any username, email address, or phone number across 600+ websites—including Instagram, YouTube, TikTok, X (Twitter), Reddit, Spotify, and GitHub—with real-time, zero-log OSINT scanning.
         </p>
 
         {/* Primary Interactive Search Workspace */}
@@ -104,8 +113,40 @@ export default function HomePage() {
           <ScanWorkspace />
         </div>
 
+        {/* Direct Internal Crawl Links for Core Tools & Tier-1 Platforms */}
+        <div className="pt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-600 max-w-3xl mx-auto">
+          <span className="font-semibold text-slate-800">Popular Lookups:</span>
+          <Link href="/find-accounts-by-username" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            Find Accounts by Username
+          </Link>
+          <Link href="/email-osint" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            Email OSINT Lookup
+          </Link>
+          <Link href="/phone-number-lookup" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            Phone Number Lookup
+          </Link>
+          <Link href="/platforms/instagram" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            Instagram Search
+          </Link>
+          <Link href="/platforms/youtube-channel" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            YouTube Handle Lookup
+          </Link>
+          <Link href="/platforms/tiktok" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            TikTok Search
+          </Link>
+          <Link href="/platforms/x" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            X (Twitter) Lookup
+          </Link>
+          <Link href="/platforms/reddit" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            Reddit Search
+          </Link>
+          <Link href="/platforms/spotify" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
+            Spotify Lookup
+          </Link>
+        </div>
+
         {/* Privacy Reassurance under Scanner */}
-        <div className="pt-3 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500">
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500">
           <Lock className="w-3.5 h-3.5 text-slate-400" />
           <span>No account required. Searches are processed in memory and aren&apos;t stored.</span>
           <Link
@@ -372,6 +413,88 @@ export default function HomePage() {
           >
             <span>Learn how to audit your digital footprint</span>
             <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      </section>
+
+      {/* 6.5 COMPETITOR COMPARISON MATRIX (SEO & AI CITATION HUB) */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto border-t border-slate-200/70 space-y-8">
+        <div className="space-y-2 max-w-2xl">
+          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            Comparison
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 tracking-tight">
+            OSINTScan vs. WhatsMyName, Sherlock CLI, Maigret &amp; Namechk
+          </h2>
+          <p className="text-sm text-slate-500 leading-relaxed">
+            Why security analysts, journalists, and everyday users choose <strong>OSINTScan</strong> (<code className="text-xs font-mono">osintscan.app</code>) to find all social media accounts by username, email, or phone number.
+          </p>
+        </div>
+
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-2xs">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50 text-slate-800 font-bold">
+                <th className="p-4">Feature / Capability</th>
+                <th className="p-4 text-indigo-700 bg-indigo-50/50">OSINTScan (osintscan.app)</th>
+                <th className="p-4">Sherlock / Maigret CLI</th>
+                <th className="p-4">WhatsMyName Web</th>
+                <th className="p-4">Namechk / InstantUsername</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 text-slate-600">
+              <tr>
+                <td className="p-4 font-semibold text-slate-900">100% Browser-Based (No Python Setup)</td>
+                <td className="p-4 font-bold text-emerald-700 bg-indigo-50/20">✓ Instant Web App</td>
+                <td className="p-4">✗ Terminal &amp; Python CLI only</td>
+                <td className="p-4">✓ Web Interface</td>
+                <td className="p-4">✓ Web Interface</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-semibold text-slate-900">Multi-Engine Correlation (4 Engines in 1)</td>
+                <td className="p-4 font-bold text-emerald-700 bg-indigo-50/20">✓ WhatsMyName + Sherlock + Maigret + Blackbird</td>
+                <td className="p-4">Single Engine Only</td>
+                <td className="p-4">Single Signature List</td>
+                <td className="p-4">Basic DNS / HTTP Check</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-semibold text-slate-900">Case-Insensitive + Exact-Case Fallback</td>
+                <td className="p-4 font-bold text-emerald-700 bg-indigo-50/20">✓ Automatic Dual-Case Matching</td>
+                <td className="p-4">Manual Re-run Required</td>
+                <td className="p-4">Case-Sensitive Misses</td>
+                <td className="p-4">Lowercase Only</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-semibold text-slate-900">Instagram, YouTube, TikTok, X &amp; Spotify</td>
+                <td className="p-4 font-bold text-emerald-700 bg-indigo-50/20">✓ Verified Deep Endpoints</td>
+                <td className="p-4">Frequently Blocked by WAF</td>
+                <td className="p-4">Partial / Login Blocked</td>
+                <td className="p-4">False Positives on SPAs</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-semibold text-slate-900">Reverse Email &amp; Phone OSINT Included</td>
+                <td className="p-4 font-bold text-emerald-700 bg-indigo-50/20">✓ Username + Email + Phone + Breach</td>
+                <td className="p-4">✗ Username Only</td>
+                <td className="p-4">✗ Username Only</td>
+                <td className="p-4">✗ Brand Domains Only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-4 text-xs">
+          <Link
+            href="/guides/whatsmyname-vs-osintscan"
+            className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+          >
+            Read: WhatsMyName vs. OSINTScan Comparison →
+          </Link>
+          <span className="text-slate-300">|</span>
+          <Link
+            href="/guides/sherlock-vs-maigret-vs-osintscan"
+            className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+          >
+            Read: Sherlock vs. Maigret vs. OSINTScan Benchmark →
           </Link>
         </div>
       </section>

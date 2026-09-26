@@ -2,8 +2,8 @@ import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { constructMetadata } from "@/lib/seo";
-import { getAllPlatforms, getPlatformBySlug } from "@/lib/platforms";
-import { getBreadcrumbSchema } from "@/lib/structured-data";
+import { getPlatformBySlug, getTier1Platforms, isTier1Platform } from "@/lib/platforms";
+import { getBreadcrumbSchema, getFAQSchema } from "@/lib/structured-data";
 import { PlatformIcon } from "@/components/platform-icon";
 import { ScanWorkspace } from "@/components/scan-workspace";
 import { ExternalLink, ShieldCheck, AlertTriangle, ArrowLeft, Globe, Terminal, BookOpen, Search } from "lucide-react";
@@ -13,8 +13,8 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const platforms = getAllPlatforms();
-  return platforms.slice(0, 50).map((p) => ({ slug: p.slug }));
+  const tier1 = getTier1Platforms();
+  return tier1.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -22,10 +22,13 @@ export async function generateMetadata({ params }: PageProps) {
   const platform = getPlatformBySlug(slug);
   if (!platform) return {};
 
+  const shouldIndex = isTier1Platform(platform.slug) || isTier1Platform(platform.id) || isTier1Platform(slug);
+
   return constructMetadata({
-    title: `${platform.displayName} Username Search & Profile Footprint | OSINTScan`,
-    description: `Audit public ${platform.displayName} accounts with OSINTScan. Discover profile URL patterns, detection signals, false-positive handling, and privacy-first verification.`,
+    title: `${platform.displayName} Username Search & Profile Lookup Free | OSINTScan`,
+    description: `Find public ${platform.displayName} accounts by username with OSINTScan. Check if a handle exists on ${platform.displayName} alongside 600+ social networks in real time with zero login required.`,
     canonical: `/platforms/${platform.slug}`,
+    noIndex: !shouldIndex,
   });
 }
 
@@ -40,11 +43,31 @@ export default async function PlatformDetailPage({ params }: PageProps) {
     { name: platform.displayName, url: `/platforms/${platform.slug}` },
   ]);
 
+  const platformFaqs = [
+    {
+      question: `How do I search for a ${platform.displayName} account by username for free?`,
+      answer: `Enter the target handle into the OSINTScan workspace above. OSINTScan automatically normalizes case sensitivity and evaluates ${platform.displayName}'s public endpoint (${platform.uriPattern}) alongside 600+ other social networks, developer forums, and gaming platforms in real time without requiring an account login.`,
+    },
+    {
+      question: `Does searching a username on ${platform.displayName} notify the account owner?`,
+      answer: `No. OSINTScan performs passive, unauthenticated HTTP fingerprint checks against publicly reachable URLs. The ${platform.displayName} account holder receives zero profile view notifications or alerts.`,
+    },
+    {
+      question: `Can I find other social media accounts linked to a ${platform.displayName} username?`,
+      answer: `Yes. Because over 65% of users reuse the same handle across platforms, searching a ${platform.displayName} username on OSINTScan simultaneously uncovers matching profiles on Instagram, YouTube, TikTok, X (Twitter), Reddit, Spotify, GitHub, and 600+ websites.`,
+    },
+  ];
+  const faqSchema = getFAQSchema(platformFaqs);
+
   return (
     <main className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-10">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Breadcrumb / Back Link */}
@@ -157,16 +180,36 @@ export default async function PlatformDetailPage({ params }: PageProps) {
         <ScanWorkspace initialInputType="username" />
       </div>
 
+      {/* Platform FAQ Section */}
+      <section className="pt-8 border-t border-slate-200 space-y-4">
+        <h2 className="text-xl font-bold text-slate-950">
+          Frequently Asked Questions: {platform.displayName} Username Lookup
+        </h2>
+        <div className="grid grid-cols-1 gap-4">
+          {platformFaqs.map((faq, idx) => (
+            <div key={idx} className="p-5 rounded-2xl bg-white border border-slate-200 space-y-1.5">
+              <h3 className="text-sm font-bold text-slate-900">{faq.question}</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Related Resources */}
       <div className="pt-8 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <BookOpen className="w-4 h-4 text-slate-400" />
-          <span>Related guide:</span>
-          <Link
-            href="/guides/how-to-find-social-media-accounts-by-username"
-            className="text-slate-900 font-semibold hover:underline"
-          >
-            How to Find Social Media Accounts by Username →
+          <span>Related tools:</span>
+          <Link href="/find-accounts-by-username" className="text-slate-900 font-semibold hover:underline">
+            Find Accounts by Username
+          </Link>
+          <span>•</span>
+          <Link href="/email-osint" className="text-slate-900 font-semibold hover:underline">
+            Email OSINT Lookup
+          </Link>
+          <span>•</span>
+          <Link href="/phone-number-lookup" className="text-slate-900 font-semibold hover:underline">
+            Phone Number Lookup
           </Link>
         </div>
         <Link
