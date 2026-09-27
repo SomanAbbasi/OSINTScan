@@ -1,71 +1,55 @@
 import { MetadataRoute } from "next";
 import { GUIDES } from "@/lib/guides";
+import { COMPARISONS } from "@/lib/comparisons";
 import { getTier1Platforms } from "@/lib/platforms";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.osintscan.app";
-  const now = new Date().toISOString();
+  const lastModified = "2026-09-27T00:00:00.000Z";
 
-  // Core static & primary tool landing pages
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: baseUrl, lastModified: now, changeFrequency: "daily", priority: 1.0 },
-
-    // Primary Navigation
-    { url: `${baseUrl}/how-it-works`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/platforms`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
-    { url: `${baseUrl}/guides`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/faq`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-
-    // Username Tool Suite
-    { url: `${baseUrl}/username-search`, lastModified: now, changeFrequency: "daily", priority: 0.95 },
-    { url: `${baseUrl}/username-lookup`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/username-osint`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/find-accounts-by-username`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
-    { url: `${baseUrl}/social-media-username-search`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/check-username-across-platforms`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${baseUrl}/username-availability-checker`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-
-    // Email Tool Suite
-    { url: `${baseUrl}/email-lookup`, lastModified: now, changeFrequency: "daily", priority: 0.95 },
-    { url: `${baseUrl}/reverse-email-lookup`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/email-osint`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/email-breach-check`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${baseUrl}/email-footprint`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-
-    // Phone Tool Suite
-    { url: `${baseUrl}/phone-lookup`, lastModified: now, changeFrequency: "daily", priority: 0.95 },
-    { url: `${baseUrl}/reverse-phone-lookup`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/phone-number-lookup`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/phone-osint`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${baseUrl}/phone-number-information`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-
-    // Digital Footprint Hub
-    { url: `${baseUrl}/digital-footprint-check`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
-
-    // Transparency & Legal
-    { url: `${baseUrl}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/privacy`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${baseUrl}/terms`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${baseUrl}/open-source`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+  // Core Information Architecture (Canonical Indexable Pages Only — No 301 Redirects or Doorway Pages)
+  const coreRoutes: MetadataRoute.Sitemap = [
+    { url: `${baseUrl}/`, lastModified, changeFrequency: "weekly", priority: 1.0 },
+    { url: `${baseUrl}/username-search`, lastModified, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${baseUrl}/email-lookup`, lastModified, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${baseUrl}/email-breach-check`, lastModified, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/phone-lookup`, lastModified, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${baseUrl}/digital-footprint-check`, lastModified, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${baseUrl}/how-it-works`, lastModified, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${baseUrl}/platforms`, lastModified, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${baseUrl}/guides`, lastModified, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${baseUrl}/comparisons`, lastModified, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${baseUrl}/faq`, lastModified, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/about`, lastModified, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${baseUrl}/open-source`, lastModified, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${baseUrl}/privacy`, lastModified, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/terms`, lastModified, changeFrequency: "monthly", priority: 0.5 },
   ];
 
-  // Guides & Competitor Comparisons
+  // Educational Guides
   const guideRoutes: MetadataRoute.Sitemap = GUIDES.map((g) => ({
     url: `${baseUrl}/guides/${g.slug}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.85,
-  }));
-
-  // Only index Tier-1 high-volume platforms (Instagram, YouTube, TikTok, X, Reddit, Spotify, GitHub, etc.)
-  // Prevents crawl budget exhaustion across 650+ minor/non-English/thin platform slugs
-  const tier1Platforms = getTier1Platforms();
-  const platformRoutes: MetadataRoute.Sitemap = tier1Platforms.map((p) => ({
-    url: `${baseUrl}/platforms/${p.slug}`,
-    lastModified: now,
-    changeFrequency: "weekly",
+    lastModified: g.dateModified ? `${g.dateModified}T00:00:00.000Z` : lastModified,
+    changeFrequency: "monthly",
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...guideRoutes, ...platformRoutes];
+  // First-Party Research & Tool Comparisons
+  const comparisonRoutes: MetadataRoute.Sitemap = COMPARISONS.map((c) => ({
+    url: `${baseUrl}/comparisons/${c.slug}`,
+    lastModified: `${c.dateUpdated}T00:00:00.000Z`,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  // Tier-1 Indexable Platform Pages Only (No NOINDEX pages in XML sitemap)
+  const tier1Platforms = getTier1Platforms();
+  const platformRoutes: MetadataRoute.Sitemap = tier1Platforms.map((p) => ({
+    url: `${baseUrl}/platforms/${p.slug}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.75,
+  }));
+
+  return [...coreRoutes, ...guideRoutes, ...comparisonRoutes, ...platformRoutes];
 }

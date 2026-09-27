@@ -3,7 +3,7 @@ import { constructMetadata } from "@/lib/seo";
 import { ToolPageTemplate } from "@/components/tool-page-template";
 
 export const metadata = constructMetadata({
-  title: "Phone Lookup — Public Carrier & Phone Number Search | OSINTScan",
+  title: "Phone Lookup — Number & Public Footprint Search | OSINTScan",
   description:
     "Look up international phone numbers to analyze carrier routing, geographic allocation, VoIP classification, and public footprint signals. In-memory and private.",
   canonical: "/phone-lookup",

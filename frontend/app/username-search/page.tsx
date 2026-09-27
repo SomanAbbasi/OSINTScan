@@ -3,9 +3,9 @@ import { constructMetadata } from "@/lib/seo";
 import { ToolPageTemplate } from "@/components/tool-page-template";
 
 export const metadata = constructMetadata({
-  title: "Username Search — Find Public Profiles Across 600+ Sites",
+  title: "Username Search — Find Public Profiles | OSINTScan",
   description:
-    "Free username search across 600+ social media platforms, developer communities, and forums. Discover public accounts and footprint signals instantly with OSINTScan.",
+    "Search a username across publicly accessible social, developer, community, and profile platforms. Discover public accounts and footprint signals with OSINTScan.",
   canonical: "/username-search",
 });
 
@@ -14,7 +14,7 @@ export default function UsernameSearchPage() {
     <ToolPageTemplate
       h1="Username Search"
       badge="Public Handle Discovery"
-      description="Scan over 600 public platforms simultaneously to discover where a username has active public profiles, social pages, and online accounts."
+      description="Search a username across publicly accessible social, developer, community, and profile platforms."
       canonical="/username-search"
       inputType="username"
       howItWorks={[

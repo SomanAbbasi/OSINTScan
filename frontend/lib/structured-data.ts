@@ -43,13 +43,11 @@ export function getWebSiteSchema() {
     "name": "OSINTScan",
     "alternateName": [
       "OSINT Scan",
-      "osintscan",
-      "osintscan.app",
-      "OSINTScan App"
+      "osintscan.app"
     ],
-    "url": SITE_URL,
+    "url": "https://www.osintscan.app/",
     "description":
-      "Free public username search and digital footprint scanner across 600+ social media platforms and online communities.",
+      "Search usernames, email addresses, and phone numbers across publicly accessible sources with transparent, privacy-first OSINT scanning.",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
@@ -68,15 +66,14 @@ export function getOrganizationSchema() {
     "name": "OSINTScan",
     "alternateName": [
       "OSINT Scan",
-      "osintscan",
       "osintscan.app"
     ],
-    "url": SITE_URL,
+    "url": "https://www.osintscan.app/",
     "logo": `${SITE_URL}/icon-512.png`,
     "sameAs": [
       "https://github.com/SomanAbbasi/OSINTScan"
     ],
-    "description": "Privacy-conscious public digital footprint auditing and security intelligence.",
+    "description": "Privacy-first public digital footprint search and open-source intelligence platform.",
   };
 }
 

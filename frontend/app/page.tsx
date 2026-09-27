@@ -59,9 +59,9 @@ const HOMEPAGE_FAQS = [
 import { constructMetadata } from "@/lib/seo";
 
 export const metadata = constructMetadata({
-  title: "OSINTScan | Free Username Search Across 600+ Social Media Platforms",
+  title: "OSINTScan — Username, Email & Phone Lookup",
   description:
-    "OSINTScan (osintscan.app) is a free username search engine, reverse email OSINT lookup, and phone footprint scanner. Find all social media accounts by username across 600+ platforms including Instagram, YouTube, TikTok, X (Twitter), Reddit, Spotify, and GitHub.",
+    "Search usernames, email addresses, and phone numbers across publicly accessible sources with transparent, privacy-first OSINT scanning.",
   canonical: "/",
 });
 
@@ -94,55 +94,22 @@ export default function HomePage() {
       <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center space-y-6">
         {/* Eyebrow */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-[11px] font-semibold text-slate-700 tracking-wider uppercase">
-          <span>OSINTScan • Free Username Search & Digital Footprint Scanner</span>
+          <span>Public Digital Footprint Search</span>
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight max-w-4xl mx-auto leading-tight">
-          OSINTScan: Free Username Search across{" "}
-          <span className="text-slate-950">600+ Social Media Platforms.</span>
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight max-w-3xl mx-auto leading-tight">
+          Search your public digital footprint.
         </h1>
 
         {/* Supporting Copy */}
         <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          <strong>OSINTScan</strong> (<code className="text-xs font-mono bg-slate-100 px-1.5 py-0.5 rounded">osintscan.app</code>) lets you search any username, email address, or phone number across 600+ websites—including Instagram, YouTube, TikTok, X (Twitter), Reddit, Spotify, and GitHub—with real-time, zero-log OSINT scanning.
+          Search usernames, email addresses, and phone numbers across publicly accessible sources with transparent, privacy-first OSINT scanning.
         </p>
 
         {/* Primary Interactive Search Workspace */}
         <div id="scanner" className="pt-4 scroll-mt-24">
           <ScanWorkspace />
-        </div>
-
-        {/* Direct Internal Crawl Links for Core Tools & Tier-1 Platforms */}
-        <div className="pt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-600 max-w-3xl mx-auto">
-          <span className="font-semibold text-slate-800">Popular Lookups:</span>
-          <Link href="/find-accounts-by-username" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            Find Accounts by Username
-          </Link>
-          <Link href="/email-osint" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            Email OSINT Lookup
-          </Link>
-          <Link href="/phone-number-lookup" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            Phone Number Lookup
-          </Link>
-          <Link href="/platforms/instagram" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            Instagram Search
-          </Link>
-          <Link href="/platforms/youtube-channel" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            YouTube Handle Lookup
-          </Link>
-          <Link href="/platforms/tiktok" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            TikTok Search
-          </Link>
-          <Link href="/platforms/x" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            X (Twitter) Lookup
-          </Link>
-          <Link href="/platforms/reddit" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            Reddit Search
-          </Link>
-          <Link href="/platforms/spotify" className="px-2.5 py-1 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors">
-            Spotify Lookup
-          </Link>
         </div>
 
         {/* Privacy Reassurance under Scanner */}
@@ -154,6 +121,28 @@ export default function HomePage() {
             className="font-medium text-slate-900 hover:text-indigo-600 underline underline-offset-2 transition-colors"
           >
             Privacy details →
+          </Link>
+        </div>
+
+        {/* Canonical Core Modules Bar */}
+        <div className="pt-3 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-600 max-w-3xl mx-auto">
+          <Link href="/username-search" className="px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 font-medium text-slate-800 transition-colors">
+            Username Search
+          </Link>
+          <Link href="/email-lookup" className="px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 font-medium text-slate-800 transition-colors">
+            Email Lookup
+          </Link>
+          <Link href="/email-breach-check" className="px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 font-medium text-slate-800 transition-colors">
+            Email Breach Check
+          </Link>
+          <Link href="/phone-lookup" className="px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 font-medium text-slate-800 transition-colors">
+            Phone Lookup
+          </Link>
+          <Link href="/digital-footprint-check" className="px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 font-medium text-slate-800 transition-colors">
+            Digital Footprint Check
+          </Link>
+          <Link href="/comparisons" className="px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 font-medium text-slate-800 transition-colors">
+            Tool Comparisons
           </Link>
         </div>
       </section>
@@ -427,7 +416,7 @@ export default function HomePage() {
             OSINTScan vs. WhatsMyName, Sherlock CLI, Maigret &amp; Namechk
           </h2>
           <p className="text-sm text-slate-500 leading-relaxed">
-            Why security analysts, journalists, and everyday users choose <strong>OSINTScan</strong> (<code className="text-xs font-mono">osintscan.app</code>) to find all social media accounts by username, email, or phone number.
+            How OSINTScan compares with command-line enumeration tools and single-purpose availability checkers across username, email, and phone workflows.
           </p>
         </div>
 
@@ -436,7 +425,7 @@ export default function HomePage() {
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50 text-slate-800 font-bold">
                 <th className="p-4">Feature / Capability</th>
-                <th className="p-4 text-indigo-700 bg-indigo-50/50">OSINTScan (osintscan.app)</th>
+                <th className="p-4 text-indigo-700 bg-indigo-50/50">OSINTScan</th>
                 <th className="p-4">Sherlock / Maigret CLI</th>
                 <th className="p-4">WhatsMyName Web</th>
                 <th className="p-4">Namechk / InstantUsername</th>
@@ -484,17 +473,24 @@ export default function HomePage() {
 
         <div className="flex flex-wrap items-center gap-4 text-xs">
           <Link
-            href="/guides/whatsmyname-vs-osintscan"
+            href="/comparisons/whatsmyname-vs-sherlock"
             className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
           >
-            Read: WhatsMyName vs. OSINTScan Comparison →
+            Read: WhatsMyName vs. Sherlock Signature Analysis →
           </Link>
           <span className="text-slate-300">|</span>
           <Link
-            href="/guides/sherlock-vs-maigret-vs-osintscan"
+            href="/comparisons/sherlock-vs-maigret"
             className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
           >
-            Read: Sherlock vs. Maigret vs. OSINTScan Benchmark →
+            Read: Sherlock vs. Maigret Benchmark →
+          </Link>
+          <span className="text-slate-300">|</span>
+          <Link
+            href="/comparisons/username-osint-tools"
+            className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+          >
+            Read: All Username OSINT Tools Compared →
           </Link>
         </div>
       </section>

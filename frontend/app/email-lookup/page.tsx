@@ -3,7 +3,7 @@ import { constructMetadata } from "@/lib/seo";
 import { ToolPageTemplate } from "@/components/tool-page-template";
 
 export const metadata = constructMetadata({
-  title: "Email Lookup — Reverse Email Search & Account Verification | OSINTScan",
+  title: "Email Lookup — Reverse Email & Exposure Search | OSINTScan",
   description:
     "Perform a privacy-first email lookup to discover registered services, public avatar hashes, and footprint signals tied to an email address. In-memory and secure.",
   canonical: "/email-lookup",

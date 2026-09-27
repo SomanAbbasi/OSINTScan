@@ -11,24 +11,13 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/api/",
           "/scans/",
-          "/*?*username=*", // Disallow indexing of ephemeral query parameter variations
+          "/results",
+          "/*?*username=*",
           "/*?*email=*",
           "/*?*phone=*",
+          "/*?*target=*",
+          "/*?*q=*",
         ],
-      },
-      {
-        userAgent: [
-          "GPTBot",
-          "ChatGPT-User",
-          "PerplexityBot",
-          "ClaudeBot",
-          "Claude-Web",
-          "Google-Extended",
-          "Applebot-Extended",
-          "CCBot",
-        ],
-        allow: ["/", "/llms.txt", "/llms-full.txt", "/how-it-works", "/platforms", "/guides", "/faq"],
-        disallow: ["/api/", "/scans/"],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

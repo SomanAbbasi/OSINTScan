@@ -86,7 +86,7 @@ export default function AboutPage() {
             Open Source Community Credit
           </h2>
           <p className="text-xs leading-relaxed">
-            Our platform detection rules are adapted from the renowned{" "}
+            Our platform detection rules build upon open-source community research including the{" "}
             <a
               href="https://github.com/WebBreacher/WhatsMyName"
               target="_blank"
@@ -95,11 +95,29 @@ export default function AboutPage() {
             >
               WhatsMyName project
             </a>
-            , initiated by Micah &quot;WebBreacher&quot; Hoffman and enriched by cybersecurity researchers globally. Learn more on our{" "}
+            , Sherlock, Maigret, and Blackbird. Learn more on our{" "}
             <Link href="/open-source" className="text-indigo-600 underline font-semibold">
               Open Source Attribution page
             </Link>
             .
+          </p>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 space-y-2">
+          <h2 className="text-sm font-bold text-slate-900">
+            Project Disambiguation &amp; Official Repository
+          </h2>
+          <p className="text-xs leading-relaxed">
+            <strong>OSINTScan</strong> (<code className="text-[11px] font-mono">https://www.osintscan.app/</code>, maintained at{" "}
+            <a
+              href="https://github.com/SomanAbbasi/OSINTScan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-indigo-600 font-semibold underline"
+            >
+              github.com/SomanAbbasi/OSINTScan
+            </a>
+            ) is a web-based public digital-footprint search application for usernames, email addresses, and phone numbers. It is an independent project and is unrelated to the open-source Go CLI network/domain reconnaissance utility (<code className="text-[11px] font-mono">method-security/osintscan</code>) developed by Method Security.
           </p>
         </div>
       </div>

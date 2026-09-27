@@ -3,9 +3,9 @@ import { constructMetadata } from "@/lib/seo";
 import { ToolPageTemplate } from "@/components/tool-page-template";
 
 export const metadata = constructMetadata({
-  title: "Digital Footprint Check — Audit Public Accounts & Online Exposure | OSINTScan",
+  title: "Digital Footprint Check — Audit Your Public Presence | OSINTScan",
   description:
-    "Audit your public digital footprint. Search usernames, email addresses, and phone numbers across 700+ websites to discover public profiles and exposure points.",
+    "Audit your public digital footprint. Search usernames, email addresses, and phone numbers across 720 publicly queryable sources to discover public profiles and exposure points.",
   canonical: "/digital-footprint-check",
 });
 

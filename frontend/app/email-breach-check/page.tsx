@@ -3,7 +3,7 @@ import { constructMetadata } from "@/lib/seo";
 import { ToolPageTemplate } from "@/components/tool-page-template";
 
 export const metadata = constructMetadata({
-  title: "Email Breach Check — Have You Been Compromised? | OSINTScan",
+  title: "Email Breach Check — Check Exposure | OSINTScan",
   description:
     "Check if your email address has appeared in publicly disclosed data breaches or security leaks. Confidential in-memory scan with zero logging.",
   canonical: "/email-breach-check",
