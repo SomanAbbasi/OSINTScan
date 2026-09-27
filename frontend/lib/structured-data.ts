@@ -115,11 +115,15 @@ export function getArticleSchema({
   description,
   url,
   datePublished,
+  dateModified,
+  authorName = "OSINTScan Research",
 }: {
   title: string;
   description: string;
   url: string;
   datePublished: string;
+  dateModified?: string;
+  authorName?: string;
 }) {
   const fullUrl = url.startsWith("http")
     ? url
@@ -132,10 +136,10 @@ export function getArticleSchema({
     "description": description,
     "url": fullUrl,
     "datePublished": datePublished,
-    "dateModified": datePublished,
+    "dateModified": dateModified || datePublished,
     "author": {
       "@type": "Organization",
-      "name": "OSINTScan Research Team",
+      "name": authorName,
       "url": SITE_URL,
     },
     "publisher": {

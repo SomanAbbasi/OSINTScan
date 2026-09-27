@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Educational Guides
   const guideRoutes: MetadataRoute.Sitemap = GUIDES.map((g) => ({
     url: `${baseUrl}/guides/${g.slug}`,
-    lastModified: g.dateModified ? `${g.dateModified}T00:00:00.000Z` : lastModified,
+    lastModified,
     changeFrequency: "monthly",
     priority: 0.8,
   }));
