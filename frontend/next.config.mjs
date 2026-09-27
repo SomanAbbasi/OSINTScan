@@ -21,6 +21,10 @@ const nextConfig = {
       { source: "/phone-number-lookup", destination: "/phone-lookup", permanent: true },
       { source: "/phone-osint", destination: "/phone-lookup", permanent: true },
       { source: "/phone-number-information", destination: "/phone-lookup", permanent: true },
+
+      // Redirect comparison guide URLs to canonical /comparisons studies
+      { source: "/guides/sherlock-vs-maigret-vs-osintscan", destination: "/comparisons/sherlock-vs-maigret", permanent: true },
+      { source: "/guides/whatsmyname-vs-osintscan", destination: "/comparisons/whatsmyname-vs-sherlock", permanent: true },
     ];
   },
 };

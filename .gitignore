@@ -51,7 +51,12 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# WMN checker reports
+# WMN checker reports & internal audit reports
 scripts/checker/*-wmncheck.md
 scripts/checker/*-wmncheck-partial.md
 .vercel
+SEO_*.md
+seo-*.md
+seo-*.json
+*_REPORT.md
+*_AUDIT.md
